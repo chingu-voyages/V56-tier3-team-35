@@ -3,18 +3,21 @@
  */
 
 import { Router } from "express";
-import patientController from "../controllers/patient.controller.js";
+import {
+  addNewPatient,
+  getAllPatients,
+  getStatusTransitions,
+  updatePatient,
+  updateStatus,
+} from "../controllers/patient.controller";
 
 const router = Router();
 
 // route to get one patient by id?
-router.get("/", patientController.getAllPatients); //gets all the patient data
-router.post("/", patientController.addNewPatient); //adds new patient
-router.put("/:id", patientController.updatePatient); //adds new patient, maybe change to PATCH?
-router.patch("/:id/status", patientController.updateStatus); //updates status of patient
-router.get(
-  "/api/patients/:id/status-transitions",
-  patientController.getStatusTransitions
-);
+router.get("/", getAllPatients);
+router.post("/", addNewPatient);
+router.put("/:id", updatePatient); // maybe change to PATCH?
+router.patch("/:id/status", updateStatus);
+router.get("/:id/status-transitions", getStatusTransitions);
 
 export default router;

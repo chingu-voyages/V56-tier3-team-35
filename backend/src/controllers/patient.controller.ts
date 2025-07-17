@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import supabase from "../config/supabaseClient.js";
 
-const getAllPatients = async (req: Request, res: Response) => {
+export const getAllPatients = async (req: Request, res: Response) => {
   console.log("🔥 Received GET request to /api/patients");
   try {
     const { data, error } = await supabase.from("patients").select("*");
@@ -20,7 +20,7 @@ const getAllPatients = async (req: Request, res: Response) => {
   }
 };
 
-const addNewPatient = async (req: Request, res: Response) => {
+export const addNewPatient = async (req: Request, res: Response) => {
   console.log("🔥 Received POST request to /api/patients");
   const newPatient = req.body;
 
@@ -46,7 +46,7 @@ const addNewPatient = async (req: Request, res: Response) => {
 
 // might change this to PATCH later if we only want to update the fields that have been changed?
 // then we might be able to use in the updating status function too
-const updatePatient = async (req: Request, res: Response) => {
+export const updatePatient = async (req: Request, res: Response) => {
   console.log("🔥 Received PUT request to /api/patients/:id");
 
   const { id } = req.params;
@@ -131,7 +131,7 @@ export const updateStatus = async (req: Request, res: Response) => {
     .json({ message: "Patient status updated successfully" });
 };
 
-const getStatusTransitions = async (req: Request, res: Response) => {
+export const getStatusTransitions = async (req: Request, res: Response) => {
   console.log(
     "🔥 Received GET request to /api/patients/:id/status-transitions"
   );
@@ -185,13 +185,3 @@ const getStatusTransitions = async (req: Request, res: Response) => {
   console.log("✅ Successfully returned status data:", availableStatuses);
   res.status(200).json({ currentStatusId, availableStatuses });
 };
-
-export const patientController = {
-  getAllPatients: getAllPatients,
-  addNewPatient: addNewPatient,
-  updatePatient: updatePatient,
-  updateStatus: updateStatus,
-  getStatusTransitions: getStatusTransitions,
-};
-
-export default patientController;
