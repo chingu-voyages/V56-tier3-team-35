@@ -9,7 +9,7 @@ app.use(express.json());
 
 const PORT: string | number = process.env.PORT || 3000;
 
-app.use("/api/patients", patientRouter);  //handles patient API requests 
+app.use("/api/patients", patientRouter); //handles patient API requests
 
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
