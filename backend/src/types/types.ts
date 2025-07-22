@@ -1,15 +1,53 @@
-// UNFINISHED !!
-// id is gonna come back too from getAllPatients since db asigns it?? but we dont need for frontend etc?
 export type Patient = {
-  patient_number: string; // unsure what type this should be, its bpchar in supabase
+  id: number;
+  patient_number: string;
   first_name: string;
   last_name: string;
   street_address: string;
   city: string;
+  postcode: string;
   region: string;
   country: string;
   phone_number: string;
   contact_email: string;
+  created_at: string;
   status: string;
-  //   created_at: string; // this is a timestamp in supabase
 };
+
+// data sent from Create New Patient form
+export type NewPatientInput = Omit<Patient, "id" | "created_at">;
+
+// data sent from UpdatePatient form (optional fields except id)
+export type UpdatePatientInput = {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  street_address?: string;
+  city?: string;
+  postcode?: string;
+  region?: string;
+  country?: string;
+  phone_number?: string;
+  contact_email?: string;
+  status?: string;
+};
+
+export type Role = "ADMIN" | "SURGICAL_TEAM";
+
+export type User = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  role: Role;
+  created_at: string;
+};
+
+export type PatientStatusKey =
+  | "CHECKED_IN"
+  | "PRE_PROCEDURE"
+  | "IN_PROGRESS"
+  | "CLOSING"
+  | "RECOVERY"
+  | "COMPLETE"
+  | "DISMISSAL";

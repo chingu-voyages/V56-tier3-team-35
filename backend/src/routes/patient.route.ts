@@ -6,18 +6,16 @@ import { Router } from "express";
 import {
   addNewPatient,
   getAllPatients,
-  getStatusTransitions,
   updatePatient,
-  updateStatus,
+  getPatient,
 } from "../controllers/patient.controller";
 
 const router = Router();
 
-// route to get one patient by id?
 router.get("/", getAllPatients);
 router.post("/", addNewPatient);
-router.put("/:id", updatePatient); // maybe change to PATCH?
-router.patch("/:id/status", updateStatus);
-router.get("/:id/status-transitions", getStatusTransitions);
+router.get("/:id", getPatient);
+router.patch("/:id", updatePatient);
+// router.patch("/:id/status", updateStatus); // want a separate contorller for this or update status via updatepatient?
 
 export default router;
