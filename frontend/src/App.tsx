@@ -1,12 +1,15 @@
 import React from 'react'
-import { Button } from '@mui/material'
+import { Box} from '@mui/material'
+import Dashboard from './Pages/Dashboard';
 
 const App = () => {
   return (
-    <div>
-      <Button variant='contained'>Hello</Button>
-    </div>
-  )
+    <Box sx={{ minHeight: "100vh", width: "100%" }}>
+      <Box component="main" sx={{ width: "100%" }}>
+        <Dashboard/>
+      </Box>
+    </Box>
+  );
 }
 
 export default App
