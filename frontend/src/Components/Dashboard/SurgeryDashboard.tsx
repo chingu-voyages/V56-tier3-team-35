@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { SurgeryModal } from "./SurgeryModal";
 
 export const SurgeryDashboard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,18 +83,7 @@ export const SurgeryDashboard = () => {
           </Box>
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Button
-              variant="contained"
-              startIcon={<Add sx={{ fontSize: 16 }} />}
-              sx={{
-                backgroundColor: "#3B82F6",
-                color: "#fff",
-                borderRadius: "8px",
-                textTransform: "none",
-              }}
-            >
-              New Surgery
-            </Button>
+            <SurgeryModal />
           </Box>
         </Box>
         {/*"filters and selects"*/}
