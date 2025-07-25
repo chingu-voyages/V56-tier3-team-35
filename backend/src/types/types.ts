@@ -1,3 +1,10 @@
+//generic shape of api response
+export type ApiResponse<T = undefined> = {
+  status: number;
+  message: string;
+  data?: T;
+};
+
 export type Patient = {
   id: number;
   patient_number: string;

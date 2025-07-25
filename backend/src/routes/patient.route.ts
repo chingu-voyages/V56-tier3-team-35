@@ -8,6 +8,7 @@ import {
   getAllPatients,
   updatePatient,
   getPatient,
+  deltePatient,
 } from "../controllers/patient.controller";
 
 const router = Router();
@@ -16,6 +17,6 @@ router.get("/", getAllPatients);
 router.post("/", addNewPatient);
 router.get("/:id", getPatient);
 router.patch("/:id", updatePatient);
-// router.patch("/:id/status", updateStatus); // want a separate contorller for this or update status via updatepatient?
+router.delete("/:id", deltePatient);
 
 export default router;
