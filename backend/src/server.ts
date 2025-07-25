@@ -1,16 +1,15 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
+import patientRouter from "./routes/patient.route.js";
 
-const app = express();
+const app: Application = express();
+
 app.use(cors());
 app.use(express.json());
 
-// test route
-app.get("/", (req, res) => { 
-  res.send("API running better:)");
-});
+const PORT: string | number = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000;
+app.use("/api/patients", patientRouter); //handles patient API requests
 
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
