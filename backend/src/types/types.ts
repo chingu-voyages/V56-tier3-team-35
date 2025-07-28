@@ -32,7 +32,7 @@ export type UpdatePatientInput = {
   street_address?: string;
   city?: string;
   postcode?: string;
-  region?: string;
+  region?: string; 
   country?: string;
   phone_number?: string;
   contact_email?: string;
