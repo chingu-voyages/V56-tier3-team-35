@@ -3,6 +3,7 @@
  */
 
 import { Router } from "express";
+import { authToken } from "../middleware/auth.middleware";
 import {
   addNewPatient,
   getAllPatients,
@@ -13,10 +14,10 @@ import {
 
 const router = Router();
 
-router.get("/", getAllPatients);
-router.post("/", addNewPatient);
-router.get("/:id", getPatient);
-router.patch("/:id", updatePatient);
-router.delete("/:id", deltePatient);
+router.get("/", authToken, getAllPatients);
+router.post("/", authToken, addNewPatient);
+router.get("/:id", authToken, getPatient);
+router.patch("/:id", authToken, updatePatient);
+router.delete("/:id", authToken, deltePatient);
 
 export default router;

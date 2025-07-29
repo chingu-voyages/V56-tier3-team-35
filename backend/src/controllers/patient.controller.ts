@@ -8,7 +8,7 @@ import {
 } from "../types/types.js";
 
 export const getAllPatients = async (
-  req: Request,
+  req: Request<{}, ApiResponse<Patient[]>, {}>,
   res: Response<ApiResponse<Patient[]>>
 ) => {
   console.log("🔥 Received GET request to /api/patients");
@@ -43,7 +43,7 @@ export const getAllPatients = async (
 };
 
 export const getPatient = async (
-  req: Request<{ id: string }>,
+  req: Request<{ id: string }, ApiResponse<Patient>, {}>,
   res: Response<ApiResponse<Patient>>
 ) => {
   console.log("🔥 Received GET request to /api/patients/:id");
@@ -84,7 +84,7 @@ export const getPatient = async (
 };
 
 export const addNewPatient = async (
-  req: Request<NewPatientInput>,
+  req: Request<{}, ApiResponse<Patient>, NewPatientInput>,
   res: Response<ApiResponse<Patient>>
 ) => {
   console.log("🔥 Received POST request to /api/patients");
@@ -120,7 +120,7 @@ export const addNewPatient = async (
 };
 
 export const deltePatient = async (
-  req: Request<{ id: string }>,
+  req: Request<{ id: string }, ApiResponse<Patient>, {}>,
   res: Response<ApiResponse<Patient>>
 ) => {
   console.log("🔥 Received DELETE request to /api/patients/:id");
@@ -161,7 +161,7 @@ export const deltePatient = async (
 };
 
 export const updatePatient = async (
-  req: Request<UpdatePatientInput>,
+  req: Request<{ id: string }, ApiResponse<Patient>, UpdatePatientInput>,
   res: Response<ApiResponse<Patient>>
 ) => {
   console.log("🔥 Received PATCH request to /api/patients/:id");
