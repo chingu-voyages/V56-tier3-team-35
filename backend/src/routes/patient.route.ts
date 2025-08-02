@@ -20,4 +20,5 @@ router.get("/:id", authToken, getPatient);
 router.patch("/:id", authToken, updatePatient);
 router.delete("/:id", authToken, deltePatient);
 
+
 export default router;

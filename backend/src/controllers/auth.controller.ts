@@ -11,7 +11,7 @@ export const signup = async (req: Request, res: Response) => {
             return res.status(401).json({ error: authError.message });
         }
 
-        const { data: signupData, error: signupError } = await supabase.from('users').insert({ id: authData.user.id, username, email, role });
+        const { data: signupData, error: signupError } = await supabase.from('users').insert({ id: authData.user.id, username, email, role, password });
 
         if (signupError) {
             return res.status(401).json({ error: signupError.message });
@@ -24,7 +24,7 @@ export const signup = async (req: Request, res: Response) => {
     }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => { 
     try {
         const { email, password } = req.body;
 
@@ -35,11 +35,11 @@ export const login = async (req: Request, res: Response) => {
         }
 
         res.cookie("access_token", loginData.session.access_token, {
-            httpOnly: true,
+            httpOnly: true, 
             secure: false,             
             sameSite: 'lax', 
             maxAge: 60 * 60 * 1000,            
-            path: '/',
+            path: '/', 
         });
 
         res.cookie("refresh_token", loginData.session.refresh_token, {
@@ -49,6 +49,8 @@ export const login = async (req: Request, res: Response) => {
             maxAge: 30 * 24 * 60 * 60 * 1000,            
             path: '/',
         });
+
+        console.log(loginData.session.access_token)
 
         res.status(200).json(loginData.user);
     } catch (error) {
@@ -106,6 +108,17 @@ export const refresh = async (req: Request, res: Response) => {
         });
 
         return res.status(200).json({ message: "Token refreshed successfully!" })
+    } catch (error) {
+        console.error("Unexpected Error: ", error.message);
+        res.status(500).json({ error: "Unexpected server error in refresh" })
+    }
+}
+
+// added a dashboard route to see if user is authenticated
+export const getDashboard = async (req: Request, res: Response) => {
+    const user = req.user;
+    try {
+        res.status(200).json({ message: "Successfully fetched dashboard data", user: user });
     } catch (error) {
         console.error("Unexpected Error: ", error.message);
         res.status(500).json({ error: "Unexpected server error in refresh" })
