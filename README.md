@@ -27,7 +27,7 @@ Builds the project and starts the production server.
 ## Our Team
 
 - Niamh Brown: [GitHub](https://github.com/NiamhBrown) / [LinkedIn](https://www.linkedin.com/in/niamh-brown1/)
-- Teammate name #2: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
+- Venkata Santhosh: [GitHub](https://github.com/BVSanthosh) / [LinkedIn](https://www.linkedin.com/in/venkata-santhosh-basina/)
 
   ...
 
