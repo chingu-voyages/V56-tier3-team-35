@@ -5,6 +5,7 @@ import Dashboard from "./Pages/Dashboard";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Notification } from "./Components/ToastNotifications";
 import Login from "./Pages/Login";
+import { ProtectedRoute } from "./helper/CheckAuth";
 
 // TanStack QueryClientProvider wraps the app to provide React Query context for caching, mutations, and queries
 const queryClient = new QueryClient();
@@ -18,7 +19,11 @@ const App = () => {
         <Box component="main" sx={{ width: "100%" }}>
           <Routes>
             {/* <Route path="/" element={} /> */}
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+              <Dashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/login" element={<Login />} />
           </Routes>
         </Box>

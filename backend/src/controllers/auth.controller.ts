@@ -124,3 +124,14 @@ export const getDashboard = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Unexpected server error in refresh" })
     }
 }
+
+
+export const checkAuth = async(req: Request, res: Response) => {
+    try {
+        // const user = req.user;
+        res.status(200).json({ message: "Authenticated" });
+    } catch (error) {
+        console.error("Unexpected Error: ", error.message);
+        res.status(500).json({ error: "Unexpected server error in refresh" })
+    }
+}

@@ -15,13 +15,15 @@ import {
 } from "@mui/material";
 import React from "react";
 import { SurgeryModal } from "./SurgeryModal";
+import { SideBar } from "./SideBar";
+// import { Header } from "./Header";
 
 export const SurgeryDashboard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentTime, setCurrentTime] = React.useState<Date>(new Date());
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
-  const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
+  // const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
   //time update automatically every minute
   React.useEffect(() => {
@@ -38,6 +40,7 @@ export const SurgeryDashboard = () => {
         padding: 6,
       }}
     >
+    <SideBar/>
       <Box
         sx={{
           maxWidth: "1200px",
@@ -48,6 +51,7 @@ export const SurgeryDashboard = () => {
         }}
       >
         {/* Header */}
+
         <Box
           sx={{
             display: "flex",
@@ -159,7 +163,7 @@ export const SurgeryDashboard = () => {
               </FormControl>
 
               {/* priority filter */}
-              <FormControl
+              {/* <FormControl
                 sx={{
                   width: { xs: "100%", lg: 150 },
                 }}
@@ -180,7 +184,7 @@ export const SurgeryDashboard = () => {
                   <MenuItem value="medium">Medium</MenuItem>
                   <MenuItem value="low">Low</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
             </Box>
           </CardContent>
         </Card>

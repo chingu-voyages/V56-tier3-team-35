@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Divider from "@mui/material/Divider";
@@ -74,6 +75,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -87,7 +89,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
         navigate('/dashboard')
         setEmail("");
         setPassword("");
-
+        setIsLoading(false);
     },
 
     // amazonq-ignore-next-line
@@ -95,6 +97,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
     onError: (error: any) => {
         const message = error?.response?.data?.message || "Could not Login User.. Invalid Credentials";
         toast.error(message)
+        setIsLoading(false);
     }
   })
 
@@ -111,8 +114,8 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
     if (!validateInputs()) {
       return;
     }
+    setIsLoading(true);
     loginMutation.mutate()
-
   };
 
   const validateInputs = () => {
@@ -209,9 +212,17 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
             <Button
               type="submit"
               fullWidth
+              disabled={isLoading}
               variant="contained"
             >
-              Sign in
+              {isLoading ? (
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CircularProgress size={20} sx={{ color: 'white', mr: 1 }} />
+                  Signing in...
+                </Box>
+              ) : (
+                'Sign in'
+              )}
             </Button>
             <Links
               component="button"
@@ -228,7 +239,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
             <Typography sx={{ textAlign: "center" }}>
               Don&apos;t have an account?{" "}
               <Links
-                href="/material-ui/getting-started/templates/sign-in/"
+                // href="/material-ui/getting-started/templates/sign-in/"
                 variant="body2"
                 sx={{ alignSelf: "center" }}
               >
