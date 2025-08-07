@@ -124,7 +124,7 @@ export const SurgeryModal = ({
         startIcon={<Add />}
         onClick={() => setOpen(true)}
         sx={{
-          background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+          background: "#4a90e2",
           color: "white",
           fontWeight: 600,
           px: 3,

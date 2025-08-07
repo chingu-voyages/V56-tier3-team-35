@@ -40,7 +40,7 @@ export const SurgeryDashboard = () => {
         padding: 6,
       }}
     >
-    <SideBar/>
+      <SideBar />
       <Box
         sx={{
           maxWidth: "1200px",
@@ -66,7 +66,7 @@ export const SurgeryDashboard = () => {
               variant="h4"
               sx={{
                 fontWeight: "bold",
-                background: "linear-gradient(90deg, #3b82f6, #9333ea)", // mimicking bg-gradient-primary
+                background: "linear-gradient(90deg, #3b82f6, #4a90e2)", // mimicking bg-gradient-primary
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
