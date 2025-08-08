@@ -16,6 +16,7 @@ import {
 import React from "react";
 import { SurgeryModal } from "./SurgeryModal";
 import { SideBar } from "./SideBar";
+// import '../../utils/cssFiles/landingPage.css'
 // import { Header } from "./Header";
 
 export const SurgeryDashboard = () => {

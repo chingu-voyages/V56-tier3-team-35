@@ -10,7 +10,7 @@ import { Calendar, Users, Heart, Shield, Menu, X, ArrowRight } from "lucide-reac
 // Button
 // } from "@mui/material";
 // import FavoriteIcon from "@mui/icons-material/Favorite";
-import '../utils/landingPage.css'
+import '../utils/cssFiles/landingPage.css'
 import { Link } from "react-router-dom";
 import { Button, Card, CardContent, Stack } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -71,7 +71,7 @@ export const Landing = () => {
         >
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
                 <Heart className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="font-bold text-lg">SurgeryMS</span>
@@ -167,7 +167,7 @@ export const Landing = () => {
                       },
                     }}
                   >
-                    <Link to='/login'>Authorized Login</Link>
+                    <Link to="/login">Authorized Login</Link>
                   </Button>
                 </div>
               </nav>
@@ -208,7 +208,7 @@ export const Landing = () => {
                     },
                   }}
                 >
-                  Continue as Guest
+                  <Link to={"/waiting-room"}>Continue as Guest</Link>
                 </Button>
 
                 <Button
@@ -228,7 +228,7 @@ export const Landing = () => {
                     },
                   }}
                 >
-                  <Link to={'/login'}>Sign In</Link>
+                  <Link to={"/login"}>Sign In</Link>
                 </Button>
               </Stack>
               {/* <Button variant="contained" size="large">
@@ -278,7 +278,7 @@ export const Landing = () => {
         </div>
       </section>
 
-      <section id="about" className="bg-muted/30 py-16">
+      <section id="about" className="bg-gray-400/4 py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">About Our Platform</h2>
@@ -296,19 +296,19 @@ export const Landing = () => {
                 <div className="text-3xl font-bold text-[#4a90e2] mb-2">
                   99.9%
                 </div>
-                <p className="text-muted-foreground">Uptime Guarantee</p>
+                <p className="">Uptime Guarantee</p>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#4a90e2] mb-2">
                   500+
                 </div>
-                <p className="text-muted-foreground">Healthcare Facilities</p>
+                <p className="">Healthcare Facilities</p>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#4a90e2] mb-2">
                   24/7
                 </div>
-                <p className="text-muted-foreground">Support Available</p>
+                <p className="">Support Available</p>
               </div>
             </div>
           </div>
@@ -316,10 +316,10 @@ export const Landing = () => {
       </section>
 
       <section className="container mx-auto px-6 py-16 text-center">
-        <Card className="max-w-2xl mx-auto backdrop-blur-sm  bg-[#1da1f2]/4">
+        <Card className="max-w-2xl mx-auto backdrop-blur-sm border-2 border-gray-400/10 rounded-lg  bg-[#1da1f2]/4">
           <CardContent className="pt-8">
             <h2 className="text-2xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-muted-foreground mb-6">
+            <p className=" mb-6">
               Join healthcare professionals who trust our platform for their
               surgical operations
             </p>

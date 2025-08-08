@@ -7,6 +7,7 @@ import { Notification } from "./Components/ToastNotifications";
 import Login from "./Pages/Login";
 import { ProtectedRoute } from "./helper/CheckAuth";
 import { Landing } from "./Pages/Landing";
+import Waiting from "./Pages/Waiting";
 
 // TanStack QueryClientProvider wraps the app to provide React Query context for caching, mutations, and queries
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => {
         <Box component="main" sx={{ width: "100%" }}>
           <Routes>
             <Route path="/" element={<Landing/>} />
+            <Route path="/waiting-room" element={<Waiting />} />
             <Route path="/dashboard" element={
               // <ProtectedRoute>
               <Dashboard />
