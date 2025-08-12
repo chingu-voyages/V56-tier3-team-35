@@ -14,7 +14,6 @@ export type Patient = {
   city: string;
   postcode: string;
   region: string;
-  country: string;
   phone_number: string;
   contact_email: string;
   created_at: string;
@@ -33,7 +32,7 @@ export type UpdatePatientInput = {
   city?: string;
   postcode?: string;
   region?: string; 
-  country?: string;
+  // country?: string;
   phone_number?: string;
   contact_email?: string;
   status?: string;

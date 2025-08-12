@@ -39,10 +39,13 @@ export const SurgeryModal = ({
     postcode: "",
     region: "",
     country: "",
+    // procedure: "",
     phone_number: "",
     contact_email: "",
     status: "scheduled",
   });
+
+  // console.log(createPatientApi);
 
   const createNewPatientMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
@@ -60,6 +63,7 @@ export const SurgeryModal = ({
         postcode: "",
         region: "",
         country: "",
+        // procedure: "",
         phone_number: "",
         contact_email: "",
         status: "scheduled",
@@ -89,6 +93,7 @@ export const SurgeryModal = ({
     localStorage.setItem("lastPatientNumber", last.toString());
 
     const patientNumber = `P#${String(last).padStart(3, "0")}`;
+    console.log(patientNumber)
     const newPatient = {
       ...formData,
       patient_number: patientNumber,
@@ -102,7 +107,7 @@ export const SurgeryModal = ({
         <Fab
           color="primary"
           aria-label="add surgery"
-          //   onClick={open}
+          onClick={() => setOpen(true)}
           sx={{
             position: "fixed",
             bottom: 16,
@@ -124,20 +129,16 @@ export const SurgeryModal = ({
         startIcon={<Add />}
         onClick={() => setOpen(true)}
         sx={{
-          background: "#4a90e2",
+          backgroundColor: "#1da1f2",
           color: "white",
-          fontWeight: 600,
-          px: 3,
-          py: 1.5,
-          borderRadius: 2,
           textTransform: "none",
-          boxShadow: "0 4px 14px 0 rgba(33, 150, 243, 0.3)",
+          fontWeight: 600,
+          borderRadius: "12px",
+          paddingX: 3,
+          paddingY: 1.2,
           "&:hover": {
-            background: "linear-gradient(45deg, #1976D2 30%, #0288D1 90%)",
-            boxShadow: "0 6px 20px 0 rgba(33, 150, 243, 0.4)",
-            transform: "translateY(-1px)",
+            backgroundColor: "#1a91da",
           },
-          transition: "all 0.2s ease-in-out",
         }}
       >
         {triggerButtonText}
@@ -278,7 +279,7 @@ export const SurgeryModal = ({
               <Grid size={{ xs: 12, md: 4 }}>
                 <TextField
                   fullWidth
-                  label="Country"
+                  label="country"
                   name="country"
                   required
                   variant="outlined"
@@ -325,7 +326,9 @@ export const SurgeryModal = ({
                     label="Status"
                   >
                     <MenuItem value="scheduled">Scheduled</MenuItem>
+                    <MenuItem value="In Progress">In Progress</MenuItem>
                     <MenuItem value="completed">Completed</MenuItem>
+                    <MenuItem value="delayed">Delayed</MenuItem>
                     <MenuItem value="cancelled">Cancelled</MenuItem>
                   </Select>
                 </FormControl>

@@ -16,10 +16,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet()); // Adds security headers
 app.use(morgan("dev"));
-
+ 
 const PORT: string | number = process.env.PORT || 3000;
 
-//test supabase connection
+//test supabase connection  
 testConn()
 
 app.use("/api/patients", patientRouter); //handles patient API requests

@@ -3,11 +3,11 @@ import { signup, login, logout, refresh, getDashboard, checkAuth} from "../contr
 import { authToken } from "../middleware/auth.middleware";
 
 const router = Router();
-
+ 
 router.post("/signup", signup);
-router.post("/login", login);
+router.post("/login", login); 
 router.post("/logout", logout);
 router.post("/refresh", refresh);
-router.get("/dash", authToken, getDashboard);
-router.get('/check-auth', authToken, checkAuth)
+router.get("/dash", getDashboard);
+router.get('/check-auth', checkAuth)
 export default router;

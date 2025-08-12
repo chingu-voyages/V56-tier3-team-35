@@ -9,16 +9,16 @@ import {
   getAllPatients,
   updatePatient,
   getPatient,
-  deltePatient,
+  deletePatient,
 } from "../controllers/patient.controller";
 
 const router = Router();
 
-router.get("/", authToken, getAllPatients);
-router.post("/", authToken, addNewPatient);
-router.get("/:id", authToken, getPatient);
-router.patch("/:id", authToken, updatePatient);
-router.delete("/:id", authToken, deltePatient);
+router.get("/", getAllPatients);
+router.post("/", addNewPatient);
+router.get("/:id", getPatient);
+router.patch("/:id", updatePatient);
+router.delete("/:id", deletePatient);
 
 
 export default router;

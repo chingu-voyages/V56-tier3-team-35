@@ -1,212 +1,14 @@
 import React from 'react'
 import '../../utils/cssFiles/landingPage.css'
 import { Badge, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from '@mui/material';
-import {Clock, Heart } from 'lucide-react';
+import {Clock, Heart, MapPin } from 'lucide-react';
 import { MobileView } from './MobileView';
+import { useQuery } from '@tanstack/react-query';
+import { getAllPatients } from '../../api/patient.api';
+import { Patient } from '../../types/types';
 
 
-//dummy data
 
-const mockWaitingRoomSurgeries: Array<any> = [
-  {
-    patient_number: "PT001",
-    first_name: "John",
-    last_name: "Anderson",
-    street_address: "123 Oak Street",
-    city: "Springfield",
-    postcode: "62701",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 123-4567",
-    contact_email: "john.anderson@email.com",
-    created_at: "2024-01-15T08:00:00Z",
-    status: "in-progress",
-    procedure: "Knee Replacement",
-    surgeon: "Dr. Sarah Mitchell",
-    room: "OR-1",
-    startTime: "08:00",
-    estimatedDuration: 3,
-    guardianName: "Mary Anderson",
-    guardianPhone: "(555) 123-4567",
-    estimatedCompletion: "11:00",
-  },
-  {
-    patient_number: "PT002",
-    first_name: "Maria",
-    last_name: "Rodriguez",
-    street_address: "456 Maple Avenue",
-    city: "Chicago",
-    postcode: "60601",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 234-5678",
-    contact_email: "maria.rodriguez@email.com",
-    created_at: "2024-01-15T09:30:00Z",
-    status: "scheduled",
-    procedure: "Appendectomy",
-    surgeon: "Dr. James Wilson",
-    room: "OR-2",
-    startTime: "09:30",
-    estimatedDuration: 1.5,
-    guardianName: "Carlos Rodriguez",
-    guardianPhone: "(555) 234-5678",
-    estimatedCompletion: "11:00",
-  },
-  {
-    patient_number: "PT003",
-    first_name: "Robert",
-    last_name: "Chen",
-    street_address: "789 Pine Road",
-    city: "Rockford",
-    postcode: "61101",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 345-6789",
-    contact_email: "robert.chen@email.com",
-    created_at: "2024-01-15T07:00:00Z",
-    status: "completed",
-    procedure: "Cardiac Bypass",
-    surgeon: "Dr. Michael Thompson",
-    room: "OR-3",
-    startTime: "07:00",
-    estimatedDuration: 5,
-    guardianName: "Linda Chen",
-    guardianPhone: "(555) 345-6789",
-    estimatedCompletion: "12:00",
-  },
-  {
-    patient_number: "PT004",
-    first_name: "Emily",
-    last_name: "Davis",
-    street_address: "321 Elm Street",
-    city: "Peoria",
-    postcode: "61602",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 456-7890",
-    contact_email: "emily.davis@email.com",
-    created_at: "2024-01-15T11:00:00Z",
-    status: "delayed",
-    procedure: "Gallbladder Removal",
-    surgeon: "Dr. Sarah Mitchell",
-    room: "OR-4",
-    startTime: "11:00",
-    estimatedDuration: 2,
-    guardianName: "James Davis",
-    guardianPhone: "(555) 456-7890",
-    estimatedCompletion: "14:30",
-  },
-  {
-    patient_number: "PT005",
-    first_name: "David",
-    last_name: "Kim",
-    street_address: "654 Cedar Lane",
-    city: "Aurora",
-    postcode: "60504",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 567-8901",
-    contact_email: "david.kim@email.com",
-    created_at: "2024-01-15T14:00:00Z",
-    status: "scheduled",
-    procedure: "Hernia Repair",
-    surgeon: "Dr. James Wilson",
-    room: "OR-1",
-    startTime: "14:00",
-    estimatedDuration: 2,
-    guardianName: "Susan Kim",
-    guardianPhone: "(555) 567-8901",
-    estimatedCompletion: "16:00",
-  },
-  {
-    patient_number: "PT006",
-    first_name: "Sarah",
-    last_name: "Johnson",
-    street_address: "987 Birch Ave",
-    city: "Naperville",
-    postcode: "60540",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 678-9012",
-    contact_email: "sarah.johnson@email.com",
-    created_at: "2024-01-15T16:00:00Z",
-    status: "scheduled",
-    procedure: "Hip Replacement",
-    surgeon: "Dr. Sarah Mitchell",
-    room: "OR-2",
-    startTime: "16:00",
-    estimatedDuration: 4,
-    guardianName: "Michael Johnson",
-    guardianPhone: "(555) 678-9012",
-    estimatedCompletion: "20:00",
-  },
-  {
-    patient_number: "PT007",
-    first_name: "Michael",
-    last_name: "Brown",
-    street_address: "147 Oak Park Dr",
-    city: "Joliet",
-    postcode: "60431",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 789-0123",
-    contact_email: "michael.brown@email.com",
-    created_at: "2024-01-15T12:30:00Z",
-    status: "in-progress",
-    procedure: "Cataract Surgery",
-    surgeon: "Dr. Michael Thompson",
-    room: "OR-3",
-    startTime: "12:30",
-    estimatedDuration: 1,
-    guardianName: "Lisa Brown",
-    guardianPhone: "(555) 789-0123",
-    estimatedCompletion: "13:30",
-  },
-  {
-    patient_number: "PT007",
-    first_name: "Michael",
-    last_name: "Brown",
-    street_address: "147 Oak Park Dr",
-    city: "Joliet",
-    postcode: "60431",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 789-0123",
-    contact_email: "michael.brown@email.com",
-    created_at: "2024-01-15T12:30:00Z",
-    status: "in-progress",
-    procedure: "Cataract Surgery",
-    surgeon: "Dr. Michael Thompson",
-    room: "OR-3",
-    startTime: "12:30",
-    estimatedDuration: 1,
-    guardianName: "Lisa Brown",
-    guardianPhone: "(555) 789-0123",
-    estimatedCompletion: "13:30",
-  },
-  {
-    patient_number: "PT007",
-    first_name: "Michael",
-    last_name: "Brown",
-    street_address: "147 Oak Park Dr",
-    city: "Joliet",
-    postcode: "60431",
-    region: "IL",
-    country: "USA",
-    phone_number: "(555) 789-0123",
-    contact_email: "michael.brown@email.com",
-    created_at: "2024-01-15T12:30:00Z",
-    status: "in-progress",
-    procedure: "Cataract Surgery",
-    surgeon: "Dr. Michael Thompson",
-    room: "OR-3",
-    startTime: "12:30",
-    estimatedDuration: 1,
-    guardianName: "Lisa Brown",
-    guardianPhone: "(555) 789-0123",
-    estimatedCompletion: "13:30",
-  }
-];
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -241,16 +43,26 @@ const getStatusText = (status: string) => {
       return "Unknown";
   }
 };
+
+
   function useIsMobile() {
     const isMobile = useMediaQuery('(max-width: 700px)');
     return isMobile;
 }
 
 export const WaitingRoom = () => {
+
+    const fetchData = useQuery({
+      queryKey: ["patients"],
+      queryFn: getAllPatients,
+    });
+
+    // Debug logging
+
+    const PatientData = fetchData.data?.data ? fetchData.data.data : [];
+
     const [currentTime, setCurrentTime] = React.useState(new Date());
-    const [surgeries] = React.useState(
-      mockWaitingRoomSurgeries
-    );
+    const surgeries = PatientData;
     const [currentPage, setCurrentPage] = React.useState(0);
 
     const itemsPerPage = 4;
@@ -274,7 +86,7 @@ export const WaitingRoom = () => {
 
 
   const activeSurgeries = surgeries.filter(
-    (surgery) => surgery.status !== "cancelled"
+    (surgery: Patient) => surgery.status !== "cancelled"
   );
 
   const paginatedSurgeries = activeSurgeries.slice(
@@ -282,6 +94,14 @@ export const WaitingRoom = () => {
     (currentPage + 1) * itemsPerPage
   );
   const isMobile = useIsMobile();
+
+  if (fetchData.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (fetchData.isError) {
+    return <div>Error loading data</div>;
+  }
 
   if (isMobile) {
     return <MobileView />;
@@ -343,7 +163,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Procedure
+                        Contact Info
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -354,7 +174,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Room/Surgeon
+                        Location
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -376,7 +196,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Time
+                        Start Time
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -386,104 +206,99 @@ export const WaitingRoom = () => {
                           color: "hsl(215, 25%, 15%)",
                         }}
                       >
-                        Guardian
+                        Date
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {paginatedSurgeries.map((surgery, index) => (
-                      <TableRow
-                        key={surgery.patient_number}
-                        sx={{
-                          borderBottom: "1px solid rgba(0,0,0,0.12)",
-                          transition: "all 0.3s ease",
-                          "&:hover": {
-                            backgroundColor: "rgba(0,0,0,0.04)",
-                            transform: "scale(1.01)",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                          },
-                        }}
-                      >
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <div className="space-y-1">
-                            <div
-                              className="text-lg font-bold"
-                              style={{ color: "hsl(215, 25%, 15%)" }}
-                            >
-                              {surgery.first_name} {surgery.last_name}
-                            </div>
-                            <div className="text-sm text-gray-600/70">
-                              {surgery.patient_number}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <div
-                            className="text-lg"
-                            // style={{ color: "hsl(215, 25%, 15%)" }}
-                          >
-                            {surgery.procedure}
-                          </div>
-                        </TableCell>
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <div className="space-y-1">
-                            <div
-                              className="text-lg font-semibold"
-                              style={{ color: "hsl(215, 25%, 15%)" }}
-                            >
-                              {surgery.room}
-                            </div>
-                            <div className="text-sm  text-gray-600/70">
-                              {surgery.surgeon}
-                            </div>
-                          </div>
-                        </TableCell>
-
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <Badge
-                            className={`${getStatusColor(
-                              surgery.status
-                            )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105`}
-                            sx={{ borderRadius: "50px" }}
-                          >
-                            <span>{getStatusText(surgery.status)}</span>
-                          </Badge>
-                        </TableCell>
-
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <div className="space-y-1">
-                            <div
-                              className="text-lg font-semibold"
-                              style={{ color: "hsl(215, 25%, 15%)" }}
-                            >
-                              {surgery.startTime}
-                            </div>
-                            {surgery.estimatedCompletion && (
-                              <div className="text-sm text-gray-600/70">
-                                Est: {surgery.estimatedCompletion}
+                    {paginatedSurgeries.map(
+                      (surgery: Patient, index: number) => (
+                        <TableRow
+                          key={surgery.patient_number}
+                          sx={{
+                            borderBottom: "1px solid rgba(0,0,0,0.12)",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: "rgba(0,0,0,0.04)",
+                              transform: "scale(1.01)",
+                              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                            },
+                          }}
+                        >
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <div className="space-y-1">
+                              <div
+                                className="text-lg font-bold"
+                                style={{ color: "hsl(215, 25%, 15%)" }}
+                              >
+                                {surgery.first_name} {surgery.last_name}
                               </div>
-                            )}
-                            <div className="text-sm text-gray-600/70">
-                              {surgery.estimatedDuration}h
+                              <div className="text-sm text-gray-600/70">
+                                {surgery.patient_number}
+                              </div>
                             </div>
-                          </div>
-                        </TableCell>
-
-                        <TableCell sx={{ padding: "1.5rem" }}>
-                          <div className="space-y-1">
-                            <div
-                              className="text-lg font-semibold"
-                              style={{ color: "hsl(215, 25%, 15%)" }}
+                          </TableCell>
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <div className="space-y-1">
+                              <div className="text-lg">
+                                {surgery.contact_email}
+                              </div>
+                              <div className="text-sm text-gray-600/70">
+                                {surgery.phone_number}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <div className="space-y-1">
+                              <div
+                                className="text-lg"
+                                style={{ color: "hsl(215, 25%, 15%)" }}
+                              >
+                                {surgery.city}, {surgery.region}
+                              </div>
+                              <div className="text-sm text-gray-400/70">
+                                {surgery.postcode}, {surgery.country}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <Badge
+                              className={`${getStatusColor(
+                                surgery.status
+                              )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105`}
+                              sx={{ borderRadius: "50px" }}
                             >
-                              {surgery.guardianName}
+                              {surgery.status.charAt(0).toUpperCase() +
+                                surgery.status.slice(1)}
+                            </Badge>
+                          </TableCell>
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <div className="space-y-1">
+                              <div
+                                className="text-lg font-semibold"
+                                style={{ color: "hsl(215, 25%, 15%)" }}
+                              >
+                                {new Date(
+                                  surgery.created_at
+                                ).toLocaleTimeString()}
+                              </div>
                             </div>
-                            <div className="text-sm  text-gray-600/70">
-                              {surgery.guardianPhone}
+                          </TableCell>
+                          <TableCell sx={{ padding: "1.5rem" }}>
+                            <div className="space-y-1">
+                              <div
+                                className="text-lg font-semibold"
+                                style={{ color: "hsl(215, 25%, 15%)" }}
+                              >
+                                {new Date(
+                                  surgery.created_at
+                                ).toLocaleDateString()}
+                              </div>
                             </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -492,7 +307,7 @@ export const WaitingRoom = () => {
 
           {/* Mobile View */}
           <div className="lg:hidden space-y-4">
-            {paginatedSurgeries.map((surgery, index) => (
+            {paginatedSurgeries.map((surgery: Patient, index) => (
               <div
                 key={surgery.patient_number}
                 className="bg-card rounded-lg shadow-card border-2 p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in"
@@ -525,99 +340,64 @@ export const WaitingRoom = () => {
                       className="font-semibold mb-1"
                       style={{ color: "hsl(215, 25%, 15%)" }}
                     >
-                      Procedure
+                      Contact Info
                     </h4>
-                    <p
-                      className="text-lg"
-                      style={{ color: "hsl(215, 25%, 15%)" }}
-                    >
-                      {surgery.procedure}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <h4
-                        className="font-semibold mb-1"
-                        style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        Room
-                      </h4>
-                      <p
-                        className="text-lg"
-                        style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        {surgery.room}
-                      </p>
-                    </div>
-                    <div>
-                      <h4
-                        className="font-semibold mb-1"
-                        style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        Surgeon
-                      </h4>
-                      <p className=" text-gray-600/70">
-                      {surgery.surgeon}</p>
+                    <div className="space-y-1">
+                      <div className="text-lg text-gray-600/40">
+                        {surgery.contact_email}
+                      </div>
+                      <div className="text-sm text-gray-600/70">
+                        {surgery.phone_number}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t pt-3">
-                    <div>
-                      <h4
-                        className="font-semibold mb-1"
-                      >
-                        Start Time
-                      </h4>
-                      <p
-                        className="text-lg text-gray-600/70"
-                      
-                      >
-                        {surgery.startTime}
-                      </p>
+                  <div className="p-3 bg-gray-400/6 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <MapPin className="w-4 h-4 text-gray-600/40" />
+                      <h4 className="font-semibold text-gray-600">Location</h4>
                     </div>
-                    {surgery.estimatedCompletion && (
+                    <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
-                        <h4
-                          className="font-semibold mb-1"
-                          style={{ color: "hsl(215, 25%, 15%)" }}
-                        >
-                          Est. Completion
-                        </h4>
-                        <p className='text-gray-600/70'>
-                          {surgery.estimatedCompletion}
+                        <p className="text-gray-600/40">Street Address</p>
+                        <p className="text-gray-600 font-medium">
+                          {surgery.street_address}
                         </p>
                       </div>
-                    )}
+                      {surgery.region && (
+                        <div>
+                          <p className="text-gray-600/40">Region:</p>
+                          <p className="text-gray-600 font-medium">
+                            {surgery.region}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-gray-600 text-sm font-medium">
+                        City: {surgery.city}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t pt-3">
+                    <div>
+                      <h4 className="font-semibold mb-1">Time</h4>
+                      <p className="text-lg text-gray-600/70">
+                        {new Date(surgery.created_at).toLocaleTimeString()}
+                      </p>
+                    </div>
                     <div>
                       <h4
                         className="font-semibold mb-1"
                         style={{ color: "hsl(215, 25%, 15%)" }}
                       >
-                        Duration
+                        Date
                       </h4>
                       <p className="text-gray-600/70">
-                        {surgery.estimatedDuration}h
+                        {new Date(surgery.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                  </div>
-
-                  <div className="border-t pt-3">
-                    <h4
-                      className="font-semibold mb-1"
-                      style={{ color: "hsl(215, 25%, 15%)" }}
-                    >
-                      Family Contact
-                    </h4>
-                    <p
-                      className="text-lg"
-                      style={{ color: "hsl(215, 25%, 15%)" }}
-                    >
-                      {surgery.guardianName}
-                    </p>
-                    <p className="text-sm text-gray-600/70">
-                      {surgery.guardianPhone}
-                    </p>
                   </div>
                 </div>
               </div>

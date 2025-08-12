@@ -16,8 +16,12 @@ import {
 import React from "react";
 import { SurgeryModal } from "./SurgeryModal";
 import { SideBar } from "./SideBar";
-// import '../../utils/cssFiles/landingPage.css'
-// import { Header } from "./Header";
+import '../../utils/cssFiles/landingPage.css'
+import { SurgeryCard } from "./SugeryCard";
+import { useQuery } from "@tanstack/react-query";
+import { getAllPatients } from "../../api/patient.api";
+import { Patient } from "../../types/types";
+
 
 export const SurgeryDashboard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -33,6 +37,34 @@ export const SurgeryDashboard = () => {
     }, 60000);
     return () => clearInterval(timer);
   }, []);
+  // fetch surgery data
+
+  const fetchData = useQuery({
+    queryKey: ["patients"],
+    queryFn: getAllPatients,
+  })
+
+  // Debug logging
+
+  const PatientData = fetchData.data?.data ? fetchData.data.data : [];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filteredSurgeries = PatientData.filter((surgery: any) => {
+    const matchesSearch =
+      (surgery.first_name + " " + surgery.last_name)
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      surgery.contact_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      surgery.patient_number.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || surgery.status === statusFilter;
+ 
+    return matchesSearch && matchesStatus;
+  });
+  
+
+
   return (
     <Box
       sx={{
@@ -93,7 +125,7 @@ export const SurgeryDashboard = () => {
         </Box>
         {/*"filters and selects"*/}
         <Card
-          sx={{ boxShadow: "gray", borderRadius: 3, border: "1px solid gray" }}
+          sx={{ boxShadow: "gray", borderRadius: 3, border: "1px solid gray", width: "100%" }}
         >
           <CardHeader
             title={
@@ -139,7 +171,23 @@ export const SurgeryDashboard = () => {
                       ),
                     },
                   }}
-                  sx={{ backgroundColor: "#F9FAFB", borderRadius: 4 }}
+                  sx={{
+                    // pl: 5, // pl-10 = spacing(5) = 40px
+                    height: "3rem", // h-12
+                    fontSize: "1rem", // text-base
+                    "& .MuiOutlinedInput-root": {
+                      border: "1px solid",
+                      borderRadius: "15px",
+                      borderColor: "#60a5fa",
+
+                      "&:hover fieldset": {
+                        borderColor: "green",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#60a5fa", // focus:border-primary
+                      },
+                    },
+                  }}
                 />
               </Box>
               {/* status filter */}
@@ -189,6 +237,21 @@ export const SurgeryDashboard = () => {
             </Box>
           </CardContent>
         </Card>
+
+        {/* cards and grid*/}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              Active Surgeries({filteredSurgeries.length})
+            </Typography>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredSurgeries.map((surgery: Patient) => (
+              <SurgeryCard key={surgery.patient_number} surgery={surgery} />
+            ))}
+          </div>
+        </div>
       </Box>
     </Box>
   );

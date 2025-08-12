@@ -10,7 +10,7 @@ export const getAllPatients = async () => {
     } catch (error) {
         console.error('Error fetching patients:', error);
         throw error;
-    }
+    } 
 };
 
 

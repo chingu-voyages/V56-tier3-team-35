@@ -94,7 +94,7 @@ export const addNewPatient = async (
       .status(400)
       .json({ message: "Patient information is required", status: 400 });
   }
-
+ 
   try {
     const { data, error } = await supabase
       .from("patients")
@@ -119,7 +119,7 @@ export const addNewPatient = async (
   }
 };
 
-export const deltePatient = async (
+export const deletePatient = async (
   req: Request<{ id: string }, ApiResponse<Patient>, {}>,
   res: Response<ApiResponse<Patient>>
 ) => {
