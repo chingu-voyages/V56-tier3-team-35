@@ -24,3 +24,14 @@ export const createPatientApi = async (data: any) => {
         throw error;
     }
 };
+
+
+export const deletePatientApi = async (id: number) => {
+    try {
+        const response = await axios.delete(`${BACKEND_URL}/api/patients/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting patient:', error);
+        throw error;
+    }
+};

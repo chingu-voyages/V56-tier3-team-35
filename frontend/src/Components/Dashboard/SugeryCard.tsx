@@ -1,9 +1,12 @@
 import { Card, Typography, Box, Badge, CardContent } from "@mui/material";
 import '../../utils/cssFiles/landingPage.css'
-import React from "react";
-import { Calendar, MapPin, Phone, User } from "lucide-react";
+// import React from "react";
+import { Calendar, MapPin, Phone } from "lucide-react";
 import LongMenu from "../Dropdown";
 import { Patient } from "../../types/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deletePatientApi } from "../../api/patient.api";
+import { toast } from "react-toastify";
 
 
 
@@ -26,7 +29,30 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export const SurgeryCard = ({ surgery }: {surgery: Patient}) => {
+export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: boolean}) => {
+
+  //delete patient
+  const queryClient = useQueryClient()
+
+  const deletePatient = useMutation({
+    mutationFn: async(id: number)=>{
+      return deletePatientApi(id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["patients"] });
+      toast.success("Patient deleted successfully");
+      window.location.reload();
+    },
+    onError:(error) => {
+      console.log(error);
+      toast.error("Error deleting patient");
+    }
+  })
+
+
+  const handleDelete = (id: number) => {
+    deletePatient.mutate(id)
+  }
   return (
     <Card
       key={surgery.patient_number}
@@ -47,7 +73,7 @@ export const SurgeryCard = ({ surgery }: {surgery: Patient}) => {
               Patient {surgery.patient_number}
             </p>
           </div>
-          <LongMenu />
+          {showMenu && <LongMenu onDelete={() => handleDelete(surgery?.id)}/>}
         </div>
       </Box>
       <div className="flex items-center justify-between px-4">

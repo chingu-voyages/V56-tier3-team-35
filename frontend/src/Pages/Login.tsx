@@ -5,25 +5,20 @@ import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import Links  from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
-import ForgotPassword from "../Components/Login/ForgotPassword";
 import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser } from '../api/auth.api'
 // import AppTheme from "../shared-theme/AppTheme";
-import {
-  SitemarkIcon,
-} from "../Components/Login/CustomIcons";
 import AppTheme from "../theme/AppTheme";
+import { Heart } from "lucide-react";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -74,7 +69,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+  
   const [isLoading, setIsLoading] = React.useState(false);
 
   const navigate = useNavigate();
@@ -101,13 +96,6 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
     }
   })
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -148,11 +136,20 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <SitemarkIcon />
+          <div className="flex  text-blue-400  gap-3 ">
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
+            <h4 className="text-2xl sm:text-1xl lg:text-2xl font-medium bg-clip-text">
+              Surgery Update Board
+            </h4>
+          </div>
           <Typography
             component="h1"
             variant="h4"
-            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+            sx={{
+              width: "100%",
+              fontSize: "clamp(2rem, 10vw, 2.15rem)",
+              color: "#1da1f2",
+            }}
           >
             Sign in
           </Typography>
@@ -208,44 +205,22 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
             <Button
               type="submit"
               fullWidth
               disabled={isLoading}
               variant="contained"
+              sx={{backgroundColor: "#1da1f2 !important", color: "white"}}
             >
               {isLoading ? (
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CircularProgress size={20} sx={{ color: 'white', mr: 1 }} />
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <CircularProgress size={20} sx={{ color: "white", mr: 1 }} />
                   Signing in...
                 </Box>
               ) : (
-                'Sign in'
+                "Sign in"
               )}
             </Button>
-            <Links
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: "center" }}
-            >
-              Forgot your password?
-            </Links>
-          </Box>
-          <Divider>or</Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Typography sx={{ textAlign: "center" }}>
-              Don&apos;t have an account?{" "}
-              <Links
-                // href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
-              >
-                Sign up
-              </Links>
-            </Typography>
           </Box>
         </Card>
       </SignInContainer>

@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../utils/cssFiles/landingPage.css'
-import { Badge, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from '@mui/material';
+import { Badge, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from '@mui/material';
 import {Clock, Heart, MapPin } from 'lucide-react';
 import { MobileView } from './MobileView';
 import { useQuery } from '@tanstack/react-query';
@@ -212,7 +212,8 @@ export const WaitingRoom = () => {
                   </TableHead>
                   <TableBody>
                     {paginatedSurgeries.map(
-                      (surgery: Patient, index: number) => (
+                      
+                      (surgery: Patient) => (
                         <TableRow
                           key={surgery.patient_number}
                           sx={{
@@ -275,8 +276,7 @@ export const WaitingRoom = () => {
                           <TableCell sx={{ padding: "1.5rem" }}>
                             <div className="space-y-1">
                               <div
-                                className="text-lg font-semibold"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
+                                className="text-lg font-semibold text-gray-600/60"
                               >
                                 {new Date(
                                   surgery.created_at
@@ -307,7 +307,7 @@ export const WaitingRoom = () => {
 
           {/* Mobile View */}
           <div className="lg:hidden space-y-4">
-            {paginatedSurgeries.map((surgery: Patient, index) => (
+            {paginatedSurgeries.map((surgery: Patient, index: number) => (
               <div
                 key={surgery.patient_number}
                 className="bg-card rounded-lg shadow-card border-2 p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in"

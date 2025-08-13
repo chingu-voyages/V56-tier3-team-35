@@ -3,10 +3,17 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteConfirmation from "./DeleteConfirmation";
 import { Edit, Trash } from "lucide-react";
+// import { Links } from "react-router-dom";
 
-export default function LongMenu() {
+interface LongMenuProps {
+  onDelete: () => void;
+}
+
+export default function LongMenu({ onDelete }: LongMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -39,8 +46,16 @@ export default function LongMenu() {
         }}
       >
         <MenuItem onClick={handleClose}><Edit className="mr-2 h-4 w-4"/> Edit</MenuItem>
-        <MenuItem onClick={handleClose} style={{color: "red"}}><Trash className="mr-2 h-4 w-4 text-red-500"/>Delete</MenuItem>
+        <MenuItem onClick={() => { handleClose(); setShowDeleteDialog(true); }} style={{color: "red"}}><Trash className="mr-2 h-4 w-4 text-red-500"/>Delete</MenuItem>
       </Menu>
+      <DeleteConfirmation
+        open={showDeleteDialog}
+        handleClose={() => setShowDeleteDialog(false)}
+        onConfirm={() => {
+          onDelete();
+          setShowDeleteDialog(false);
+        }}
+      />
     </div>
-  );
+  )
 }
