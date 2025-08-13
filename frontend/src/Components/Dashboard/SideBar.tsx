@@ -1,5 +1,4 @@
 import React from 'react'
-import { SitemarkIcon } from '../Login/CustomIcons'
 
 import {
   Drawer,
@@ -26,6 +25,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {useMutation} from "@tanstack/react-query";
 import { Logout } from '../../api/auth.api';
 import {toast} from "react-toastify";
+import { Heart } from 'lucide-react';
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: DashboardIcon },
@@ -70,9 +70,12 @@ export const SideBar = () => {
       }}
     >
       <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <SitemarkIcon />
-        </Box>
+        <div className="flex  text-blue-400  gap-3 ">
+          <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
+          <h4 className="font-medium bg-clip-text">
+            Surgery Update Board
+          </h4>
+        </div>
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
@@ -125,7 +128,12 @@ export const SideBar = () => {
                 >
                   <Icon />
                 </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={item.title} primaryTypographyProps={{ fontSize: '0.85rem' }} />}
+                {!isCollapsed && (
+                  <ListItemText
+                    primary={item.title}
+                    primaryTypographyProps={{ fontSize: "0.85rem" }}
+                  />
+                )}
               </ListItemButton>
             </ListItem>
           );
@@ -157,7 +165,12 @@ export const SideBar = () => {
             >
               <LogoutIcon />
             </ListItemIcon>
-            {!isCollapsed && <ListItemText primary="Logout" primaryTypographyProps={{ fontSize: '0.85rem' }} />}
+            {!isCollapsed && (
+              <ListItemText
+                primary="Logout"
+                primaryTypographyProps={{ fontSize: "0.85rem" }}
+              />
+            )}
           </ListItemButton>
         </ListItem>
       </Box>
