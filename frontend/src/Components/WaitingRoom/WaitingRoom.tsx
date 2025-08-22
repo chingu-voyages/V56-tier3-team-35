@@ -135,8 +135,7 @@ export const WaitingRoom = () => {
           </h2>
 
           <div
-            className="hidden lg:block bg-card rounded-lg shadow-card border-2 overflow-hidden animate-scale-in"
-            style={{ border: "1px solid red" }}
+            className="hidden lg:block bg-card rounded-lg shadow-card border-1 border-gray-300 overflow-hidden animate-scale-in"
           >
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 600 }}>
@@ -163,7 +162,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Contact Info
+                        Procedure
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -174,7 +173,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Location
+                        Surgeon/Room
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -196,7 +195,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Start Time
+                        Time
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -206,99 +205,107 @@ export const WaitingRoom = () => {
                           color: "hsl(215, 25%, 15%)",
                         }}
                       >
-                        Date
+                        Family Contact
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {paginatedSurgeries.map(
-                      
-                      (surgery: Patient) => (
-                        <TableRow
-                          key={surgery.patient_number}
-                          sx={{
-                            borderBottom: "1px solid rgba(0,0,0,0.12)",
-                            transition: "all 0.3s ease",
-                            "&:hover": {
-                              backgroundColor: "rgba(0,0,0,0.04)",
-                              transform: "scale(1.01)",
-                              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                            },
-                          }}
-                        >
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-bold"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {surgery.first_name} {surgery.last_name}
-                              </div>
-                              <div className="text-sm text-gray-600/70">
-                                {surgery.patient_number}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div className="text-lg">
-                                {surgery.contact_email}
-                              </div>
-                              <div className="text-sm text-gray-600/70">
-                                {surgery.phone_number}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {surgery.city}, {surgery.region}
-                              </div>
-                              <div className="text-sm text-gray-400/70">
-                                {surgery.postcode}, {surgery.country}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <Badge
-                              className={`${getStatusColor(
-                                surgery.status
-                              )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105`}
-                              sx={{ borderRadius: "50px" }}
+                    {paginatedSurgeries.map((surgery: Patient) => (
+                      <TableRow
+                        key={surgery.patient_number}
+                        sx={{
+                          borderBottom: "1px solid rgba(0,0,0,0.12)",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,0,0,0.04)",
+                            transform: "scale(1.01)",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                          },
+                        }}
+                      >
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg font-bold"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
                             >
+                              {surgery.patient_number}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div className="text-lg">{surgery.procedure}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
+                            >
+                              {surgery.surgeon}
+                            </div>
+                            <div className="text-sm text-gray-400/70">
+                              {surgery.room}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <Badge
+                            className={`${getStatusColor(
+                              surgery.status
+                            )} text-sm px-6  font-semibold transition-all duration-300 hover:scale-105`}
+                            sx={{ borderRadius: "50px" }}
+                          >
+                            <span className="p-3">
                               {surgery.status.charAt(0).toUpperCase() +
                                 surgery.status.slice(1)}
-                            </Badge>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-semibold text-gray-600/60"
-                              >
-                                {new Date(
-                                  surgery.created_at
-                                ).toLocaleTimeString()}
-                              </div>
+                            </span>
+                          </Badge>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div className="text-lg font-semibold text-black">
+                              {new Date(
+                                surgery.created_at
+                              ).toLocaleTimeString()}
                             </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-semibold"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {new Date(
-                                  surgery.created_at
-                                ).toLocaleDateString()}
-                              </div>
+                            <div className="text-sm text-black">
+                              Est:{" "}
+                              {(() => {
+                                const startTime = new Date(surgery.created_at);
+                                const endTime = new Date(
+                                  startTime.getTime() +
+                                    surgery.duration * 60 * 60 * 1000
+                                );
+                                return endTime.toLocaleTimeString("en-US", {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: false,
+                                });
+                              })()}
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
+                            <div className="text-sm text-gray-400">
+                              Duration: {surgery.duration}h
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg font-semibold"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
+                            >
+                              {surgery.contact_name}
+                            </div>
+                            <div className="text-sm text-gray-400/70">
+                              {surgery.phone_number}
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
