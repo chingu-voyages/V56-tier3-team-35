@@ -35,17 +35,15 @@ export const SurgeryModal = ({
     first_name: "",
     last_name: "",
     street_address: "",
-    city: "",
-    postcode: "",
-    region: "",
-    country: "",
-    // procedure: "",
     phone_number: "",
-    contact_email: "",
-    status: "scheduled",
+    procedure: "",
+    contact_name: "",
+    surgeon: "",
+    room: "OR-1",
+    duration: "",
+    status: "scheduled"
   });
 
-  // console.log(createPatientApi);
 
   const createNewPatientMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
@@ -59,13 +57,12 @@ export const SurgeryModal = ({
         first_name: "",
         last_name: "",
         street_address: "",
-        city: "",
-        postcode: "",
-        region: "",
-        country: "",
-        // procedure: "",
         phone_number: "",
-        contact_email: "",
+        procedure: "",
+        contact_name: "",
+        surgeon: "",
+        room: "OR-1",
+        duration: "",
         status: "scheduled",
       });
     },
@@ -84,8 +81,10 @@ export const SurgeryModal = ({
     // Validate with zod
     const result = createNewPatientSchema.safeParse(formData);
     if (!result.success) {
-      // Show all validation errors in a toast
-      toast.error('error creating Patient')
+      const errorMessages = result.error.issues
+        .map((issue) => issue.message)
+        .join(", ");
+      toast.error(`Validation failed: ${errorMessages}`);
       return;
     }
     let last = parseInt(localStorage.getItem("lastPatientNumber") || "0", 10);
@@ -152,7 +151,7 @@ export const SurgeryModal = ({
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
         slotProps={{
           paper: {
@@ -169,7 +168,6 @@ export const SurgeryModal = ({
             justifyContent: "space-between",
             alignItems: "center",
             color: "blue",
-            mb: 2,
           }}
         >
           <Typography
@@ -198,7 +196,7 @@ export const SurgeryModal = ({
 
         <form onSubmit={handleSubmit}>
           <DialogContent>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               Add a new surgery to the schedule. All fields are required.
             </Typography>
             <Grid container spacing={3}>
@@ -208,8 +206,16 @@ export const SurgeryModal = ({
                   label="First Name"
                   name="first_name"
                   required
+                  placeholder="eg; John"
                   variant="outlined"
                   value={formData.first_name}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
                   onChange={(e) =>
                     handleInputChange("first_name", e.target.value)
                   }
@@ -221,70 +227,121 @@ export const SurgeryModal = ({
                   label="Last Name"
                   name="last_name"
                   required
+                  placeholder="eg; Doe"
                   variant="outlined"
                   value={formData.last_name}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
                   onChange={(e) =>
                     handleInputChange("last_name", e.target.value)
                   }
                 />
               </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
+              <Grid size={{ xs: 12, md: 12 }}>
                 <TextField
                   fullWidth
-                  label="Street Address"
-                  name="street_address"
+                  label="Procedure"
+                  name="procedure"
                   required
                   variant="outlined"
-                  value={formData.street_address}
+                  value={formData.procedure}
+                  placeholder="eg; Laparoscopic Appendectomy"
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
                   onChange={(e) =>
-                    handleInputChange("street_address", e.target.value)
+                    handleInputChange("procedure", e.target.value)
                   }
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="City"
-                  name="city"
+                  label="Surgeon"
+                  name="surgeon"
                   required
+                  placeholder="eg; Dr. John Doe"
                   variant="outlined"
-                  value={formData.city}
-                  onChange={(e) => handleInputChange("city", e.target.value)}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
+                  value={formData.surgeon}
+                  onChange={(e) => handleInputChange("surgeon", e.target.value)}
                 />
               </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Room</InputLabel>
+                  <Select
+                    value={formData.room}
+                    onChange={(e) => handleInputChange("room", e.target.value)}
+                    label="Room"
+                    sx={{
+                      borderRadius: 2,
+                    }}
+                  >
+                    <MenuItem value="OR-1">OR-1</MenuItem>
+                    <MenuItem value="OR-2">OR-2</MenuItem>
+                    <MenuItem value="OR-3">OR-3</MenuItem>
+                    <MenuItem value="OR-4">OR-4</MenuItem>
+                    <MenuItem value="OR-5">OR-5</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Postcode"
-                  name="postcode"
+                  label="Duration"
+                  name="duration"
                   required
+                  type="number"
+                  placeholder="eg; 2"
                   variant="outlined"
-                  value={formData.postcode}
+                  value={formData.duration}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
                   onChange={(e) =>
-                    handleInputChange("postcode", e.target.value)
+                    handleInputChange("duration", e.target.value)
                   }
                 />
               </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Region"
-                  name="region"
+                  label="Contact Name"
+                  name="contact_name"
                   required
                   variant="outlined"
-                  value={formData.region}
-                  onChange={(e) => handleInputChange("region", e.target.value)}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <TextField
-                  fullWidth
-                  label="country"
-                  name="country"
-                  required
-                  variant="outlined"
-                  value={formData.country}
-                  onChange={(e) => handleInputChange("country", e.target.value)}
+                  placeholder="eg; Jane Doe"
+                  value={formData.contact_name}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
+                  onChange={(e) =>
+                    handleInputChange("contact_name", e.target.value)
+                  }
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -294,7 +351,15 @@ export const SurgeryModal = ({
                   name="phone_number"
                   required
                   variant="outlined"
+                  placeholder="eg; 123-456-7890"
                   value={formData.phone_number}
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
                   onChange={(e) =>
                     handleInputChange("phone_number", e.target.value)
                   }
@@ -303,14 +368,21 @@ export const SurgeryModal = ({
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Contact Email"
-                  name="contact_email"
-                  type="email"
+                  label="Address"
+                  name="street_address"
                   required
                   variant="outlined"
-                  value={formData.contact_email}
+                  placeholder="eg; 123 Main St, City, State, Zip"
+                  slotProps={{
+                    input: {
+                      sx: {
+                        borderRadius: 2,
+                      },
+                    },
+                  }}
+                  value={formData.street_address}
                   onChange={(e) =>
-                    handleInputChange("contact_email", e.target.value)
+                    handleInputChange("street_address", e.target.value)
                   }
                 />
               </Grid>
@@ -323,6 +395,10 @@ export const SurgeryModal = ({
                     onChange={(e) =>
                       handleInputChange("status", e.target.value)
                     }
+                    sx={{
+                      border: 0,
+                      borderRadius: 2,
+                    }}
                     label="Status"
                   >
                     <MenuItem value="scheduled">Scheduled</MenuItem>
@@ -341,12 +417,16 @@ export const SurgeryModal = ({
               onClick={() => setOpen(false)}
               variant="outlined"
               sx={{
-                minWidth: 120,
-                borderColor: "#e0e0e0",
-                color: "#666",
+                backgroundColor: "red",
+                color: "white",
+                textTransform: "none",
+                // fontWeight: 600,
+                borderRadius: "12px",
+                border: 0,
+                paddingX: 3,
+                paddingY: 1.2,
                 "&:hover": {
-                  borderColor: "#bdbdbd",
-                  backgroundColor: "#f5f5f5",
+                  opacity: 0.7,
                 },
               }}
             >
@@ -356,11 +436,14 @@ export const SurgeryModal = ({
               type="submit"
               variant="contained"
               sx={{
-                minWidth: 120,
-                background: "linear-gradient(45deg, #4caf50 30%, #66bb6a 90%)",
+                backgroundColor: "#1da1f2",
+                color: "white",
+                textTransform: "none",
+                borderRadius: "12px",
+                paddingX: 3,
+                paddingY: 1.2,
                 "&:hover": {
-                  background:
-                    "linear-gradient(45deg, #388e3c 30%, #4caf50 90%)",
+                  backgroundColor: "#1a91da",
                 },
               }}
             >

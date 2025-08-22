@@ -1,7 +1,7 @@
 import { Card, Typography, Box, Badge, CardContent } from "@mui/material";
 import '../../utils/cssFiles/landingPage.css'
 // import React from "react";
-import { Calendar, MapPin, Phone } from "lucide-react";
+import { Calendar, MapPin, Phone, User } from "lucide-react";
 import LongMenu from "../Dropdown";
 import { Patient } from "../../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -29,7 +29,7 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: boolean}) => {
+export const SurgeryCard = ({ surgery, showMenu, showContact, showName }: {surgery: Patient, showMenu: boolean, showContact: boolean, showName: boolean}) => {
 
   //delete patient
   const queryClient = useQueryClient()
@@ -62,6 +62,8 @@ export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: 
       <Box sx={{ paddingBottom: "0.75rem", padding: "1.5rem" }}>
         <div className="flex items-start justify-between">
           <div>
+          {showName && (
+            <>
             <Typography
               // variant="h6"
               sx={{ fontSize: "1.25rem" }}
@@ -69,16 +71,30 @@ export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: 
             >
               {surgery.first_name} {surgery.last_name}
             </Typography>
-            <p className="text-sm text-gray-600/40 mt-1">
-              Patient {surgery.patient_number}
+            <p className="text-gray-400  mt-1">
+              Patient <span className="font-semibold text-gray-500">{surgery.patient_number}</span>
             </p>
+          </>
+          )}
+            {!showName && <p className="text-gray-600 text-2xl mt-1">
+              Patient <span className="font-semibold">{surgery.patient_number}</span>
+            </p>}
           </div>
-          {showMenu && <LongMenu onDelete={() => handleDelete(surgery?.id)} onEdit={surgery}/>}
+          {showMenu && (
+            <LongMenu
+              onDelete={() => handleDelete(surgery?.id)}
+              onEdit={surgery}
+            />
+          )}
         </div>
       </Box>
       <div className="flex items-center justify-between px-4">
-        <Badge className={`${getStatusColor(surgery.status)} font-semibold p-2 rounded-lg px-3`}>
-         {surgery.status.charAt(0).toUpperCase() + surgery.status.slice(1)}
+        <Badge
+          className={`${getStatusColor(
+            surgery.status
+          )} font-semibold p-2 rounded-lg px-3`}
+        >
+          {surgery.status.charAt(0).toUpperCase() + surgery.status.slice(1)}
         </Badge>
         <div className="flex items-center gap-1 text-xs ">
           <Calendar className="w-3 h-3" />
@@ -87,41 +103,73 @@ export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: 
       </div>
 
       <CardContent className="space-y-4">
-
         <div className="p-3 bg-gray-400/6 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <MapPin className="w-4 h-4 text-gray-600/40" />
-            <h4 className="font-semibold text-gray-600">Location</h4>
-          </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <p className="text-gray-600/40">Street Address</p>
-              <p className="text-gray-600 font-medium">{surgery.street_address}</p>
+          <h4 className="font-semibold text-gray-600 mb-1">Procedure</h4>
+          <p className="text-gray-600">{surgery.procedure}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="p-3 bg-gray-400/6 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <MapPin className="w-4 h-4 text-gray-600/40" />
+              <h4 className="font-semibold text-600 text-sm">Room</h4>
             </div>
-            {surgery.region && (
-              <div>
-                <p className="text-gray-600/40">Region:</p>
-                <p className="text-gray-600 font-medium">
-                  {surgery.region}
-                </p>
-              </div>
-            )}
+            <p className="text-gray-600  font-medium">{surgery.room}</p>
           </div>
-          <div className="mt-2">
-            <p className="text-gray-600 text-sm font-medium">
-              City: {surgery.city}
-            </p>
+          <div className="p-3 bg-gray-400/6 rounded-lg">
+            <div className="flex items-center gap-2 mb-1">
+              <User className="w-4 h-4 text-600" />
+              <h4 className="font-semibold text-gray-600 text-sm">Surgeon</h4>
+            </div>
+            <p className="text-gray-600 text-sm">{surgery.surgeon}</p>
           </div>
         </div>
 
+        <div className="p-3 bg-gray-400/6 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <Calendar className="w-4 h-4 text-gray-400/80" />
+            <h4 className="font-semibold text-foreground">Schedule</h4>
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <p className="text-gray-400/80">Started:</p>
+              <p className=" font-medium">
+                {new Date(surgery.created_at).toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-500">Est. Done:</p>
+              <p className="font-medium">
+                {(() => {
+                  const startTime = new Date(surgery.created_at);
+                  const endTime = new Date(startTime.getTime() + (surgery.duration * 60 * 60 * 1000));
+                  return endTime.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  });
+                })()}
+              </p>
+            </div>
+          </div>
+          <div className="mt-2">
+            <p className="text-gray-500 text-sm">Duration: {surgery.duration}h</p>
+          </div>
+        </div>
+      { showContact &&(
         <div className="p-3 bg-blue-400/5 rounded-lg border border-blue-400/20">
           <div className="flex items-center gap-2 mb-2">
             <Phone className="w-4 h-4  text-blue-400" />
             <h4 className="font-semibold text-gray-400">Your Contact Info</h4>
           </div>
-          <p className="font-medium">{surgery.contact_email}</p>
+          <p className="font-medium">{surgery.contact_name}</p>
           <p className="text-sm text-gray-600/40">{surgery.phone_number}</p>
         </div>
+          )
+      }
       </CardContent>
     </Card>
   );

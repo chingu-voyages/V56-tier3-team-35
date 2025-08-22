@@ -44,12 +44,12 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
         first_name: patient.first_name,
         last_name: patient.last_name,
         street_address: patient.street_address,
-        city: patient.city,
-        postcode: patient.postcode,
-        region: patient.region,
-        country: patient.country,
+        duration: patient.duration,
+        procedure: patient.procedure,
+        surgeon: patient.surgeon,
+        room: patient.room,
         phone_number: patient.phone_number,
-        contact_email: patient.contact_email,
+        contact_name: patient.contact_name,
         status: patient.status
       });
       setErrors({});
@@ -82,11 +82,6 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
     }
     if (!formData.last_name?.trim()) {
       newErrors.last_name = 'Last name is required';
-    }
-    if (!formData.contact_email?.trim()) {
-      newErrors.contact_email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact_email)) {
-      newErrors.contact_email = 'Invalid email format';
     }
     
     setErrors(newErrors);
@@ -141,221 +136,239 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
           <Close />
         </IconButton>
       </DialogTitle>
-     <form onSubmit={handleSubmit}>
-      <DialogContent sx={{ pt: 3 }}>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="First Name *"
-              value={formData.first_name || ""}
-              onChange={(e) => handleChange("first_name", e.target.value)}
-              size="small"
-              error={!!errors.first_name}
-              helperText={errors.first_name}
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
+      <form onSubmit={handleSubmit}>
+        <DialogContent sx={{ pt: 3 }}>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="First Name *"
+                name='first_name'
+                value={formData.first_name || ""}
+                onChange={(e) => handleChange("first_name", e.target.value)}
+                size="small"
+                error={!!errors.first_name}
+                placeholder="eg; John"
+                helperText={errors.first_name}
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
                   },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="Last Name *"
-              value={formData.last_name || ""}
-              onChange={(e) => handleChange("last_name", e.target.value)}
-              size="small"
-              error={!!errors.last_name}
-              helperText={errors.last_name}
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 12 }}>
-            <TextField
-              fullWidth
-              label="Street Address"
-              value={formData.street_address || ""}
-              onChange={(e) => handleChange("street_address", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <TextField
-              fullWidth
-              label="City"
-              value={formData.city || ""}
-              onChange={(e) => handleChange("city", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <TextField
-              fullWidth
-              label="Postcode"
-              value={formData.postcode || ""}
-              onChange={(e) => handleChange("postcode", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <TextField
-              fullWidth
-              label="Region"
-              value={formData.region || ""}
-              onChange={(e) => handleChange("region", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="Country"
-              value={formData.country || ""}
-              onChange={(e) => handleChange("country", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="Phone Number"
-              value={formData.phone_number || ""}
-              onChange={(e) => handleChange("phone_number", e.target.value)}
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 12 }}>
-            <TextField
-              fullWidth
-              label="Email *"
-              value={formData.contact_email || ""}
-              onChange={(e) => handleChange("contact_email", e.target.value)}
-              size="small"
-              error={!!errors.contact_email}
-              helperText={errors.contact_email}
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 2,
-                  },
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 12 }}>
-            <FormControl fullWidth size="small">
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={formData.status || "scheduled"}
-                onChange={(e) => handleChange("status", e.target.value)}
-                label="Status"
-                sx={{
-                  borderRadius: 2,
                 }}
-              >
-                <MenuItem value="scheduled">Scheduled</MenuItem>
-                <MenuItem value="in-progress">In Progress</MenuItem>
-                <MenuItem value="completed">Completed</MenuItem>
-                <MenuItem value="delayed">Delayed</MenuItem>
-                <MenuItem value="cancelled">Cancelled</MenuItem>
-              </Select>
-            </FormControl>
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Last Name *"
+                name='last_name'
+                value={formData.last_name || ""}
+                onChange={(e) => handleChange("last_name", e.target.value)}
+                size="small"
+                placeholder="eg; Doe"
+                error={!!errors.last_name}
+                helperText={errors.last_name}
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <TextField
+                fullWidth
+                label="Procedure"
+                name='procedure'
+                value={formData.procedure || ""}
+                onChange={(e) => handleChange("procedure", e.target.value)}
+                size="small"
+                placeholder="eg; Laparoscopic Appendectomy"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Surgeon"
+                name='surgeon'
+                value={formData.surgeon || ""}
+                onChange={(e) => handleChange("surgeon", e.target.value)}
+                placeholder="eg; Dr. John Doe"
+                size="small"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Room</InputLabel>
+                <Select
+                  value={formData.room || "ÓR-1"}
+                  onChange={(e) => handleChange("room", e.target.value)}
+                  label="Room"
+                  sx={{
+                    borderRadius: 2,
+                  }}
+                >
+                  <MenuItem value="OR-1">OR-1</MenuItem>
+                  <MenuItem value="OR-2">OR-2</MenuItem>
+                  <MenuItem value="OR-3">OR-3</MenuItem>
+                  <MenuItem value="OR-4">OR-4</MenuItem>
+                  <MenuItem value="OR-5">OR-5</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Duration"
+                type="number"
+                name='duration'
+                placeholder="eg; 2"
+                variant="outlined"
+                value={formData.duration || ""}
+                onChange={(e) => handleChange("duration", e.target.value)}
+                size="small"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Contact Name"
+                name="contact_name"
+                value={formData.contact_name || ""}
+                onChange={(e) => handleChange("contact_name", e.target.value)}
+                size="small"
+                placeholder="eg; Jane Doe"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Phone Number"
+                name="phone_number"
+                value={formData.phone_number || ""}
+                placeholder="eg; 123-456-7890"
+                onChange={(e) => handleChange("phone_number", e.target.value)}
+                size="small"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                fullWidth
+                label="Address"
+                name='street_Address'
+                placeholder="eg; 123 Main St, City, State, Zip"
+                value={formData.street_address || ""}
+                onChange={(e) => handleChange("street_address", e.target.value)}
+                size="small"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 2,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={formData.status || "scheduled"}
+                  onChange={(e) => handleChange("status", e.target.value)}
+                  label="Status"
+                  sx={{
+                    borderRadius: 2,
+                  }}
+                >
+                  <MenuItem value="scheduled">Scheduled</MenuItem>
+                  <MenuItem value="in-progress">In Progress</MenuItem>
+                  <MenuItem value="completed">Completed</MenuItem>
+                  <MenuItem value="delayed">Delayed</MenuItem>
+                  <MenuItem value="cancelled">Cancelled</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
+        </DialogContent>
 
-      <DialogActions sx={{ p: 3, gap: 1 }}>
-        <Button
-          onClick={onClose}
-          variant="outlined"
-          sx={{
-            backgroundColor: "red",
-            color: "white",
-            textTransform: "none",
-            // fontWeight: 600,
-            borderRadius: "12px",
-            border: 0,
-            paddingX: 3,
-            paddingY: 1.2,
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={updateMutation.isPending}
-          sx={{
-            backgroundColor: "#1da1f2",
-            color: "white",
-            textTransform: "none",
-            borderRadius: "12px",
-            paddingX: 3,
-            paddingY: 1.2,
-            "&:hover": {
-              backgroundColor: "#1a91da",
-            },
-          }}
-        >
-          {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
-        </Button>
-
-      </DialogActions> 
+        <DialogActions sx={{ p: 3, gap: 1 }}>
+          <Button
+            onClick={onClose}
+            variant="outlined"
+            sx={{
+              backgroundColor: "red",
+              color: "white",
+              textTransform: "none",
+              // fontWeight: 600,
+              borderRadius: "12px",
+              border: 0,
+              paddingX: 3,
+              paddingY: 1.2,
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={updateMutation.isPending}
+            sx={{
+              backgroundColor: "#1da1f2",
+              color: "white",
+              textTransform: "none",
+              borderRadius: "12px",
+              paddingX: 3,
+              paddingY: 1.2,
+              "&:hover": {
+                backgroundColor: "#1a91da",
+              },
+            }}
+          >
+            {updateMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
+        </DialogActions>
       </form>
     </Dialog>
   );

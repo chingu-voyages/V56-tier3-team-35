@@ -1,20 +1,17 @@
 import {z} from "zod";
 
-
- export const createNewPatientSchema = z.object({
-    first_name: z.string().min(1),
-    last_name: z.string().min(1),
-    street_address: z.string().min(1),
-    region: z.string().min(1),
-    city: z.string().min(1),
-    postcode: z.string().min(1),
-    country: z.string().min(1),
-    phone_number: z.string().min(1),
-    contact_email: z.string().min(1),
-    status: z.string().min(1),
-
-})
-
+export const createNewPatientSchema = z.object({
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  street_address: z.string().min(1, "Address is required"),
+  phone_number: z.string().min(1, "Phone number is required"),
+  procedure: z.string().min(1, "Procedure is required"),
+  contact_name: z.string().min(1, "Contact name is required"),
+  surgeon: z.string().min(1, "Surgeon is required"),
+  room: z.string().min(1, "Room is required"),
+  duration: z.string().min(1, "Duration is required"),
+  status: z.string().min(1, "Status is required"),
+});
 
 
 

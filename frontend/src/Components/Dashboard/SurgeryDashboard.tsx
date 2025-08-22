@@ -125,7 +125,12 @@ export const SurgeryDashboard = () => {
         </Box>
         {/*"filters and selects"*/}
         <Card
-          sx={{ boxShadow: "gray", borderRadius: 3, border: "1px solid gray", width: "100%" }}
+          sx={{
+            boxShadow: "gray",
+            borderRadius: 3,
+            border: "1px solid gray",
+            width: "100%",
+          }}
         >
           <CardHeader
             title={
@@ -224,7 +229,13 @@ export const SurgeryDashboard = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredSurgeries.map((surgery: Patient) => (
-              <SurgeryCard key={surgery.patient_number} surgery={surgery} showMenu />
+              <SurgeryCard
+                key={surgery.patient_number}
+                surgery={surgery}
+                showMenu
+                showName
+                showContact
+              />
             ))}
           </div>
         </div>
