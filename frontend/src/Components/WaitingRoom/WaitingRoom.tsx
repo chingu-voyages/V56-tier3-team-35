@@ -418,7 +418,7 @@ export const WaitingRoom = () => {
           ))}
         </div>
 
-        <div className="text-center text-muted-foreground pt-8 animate-fade-in">
+        <div className="text-center pt-8 animate-fade-in">
           <p className="text-base sm:text-lg">
             For questions or concerns, please speak with the front desk staff.
           </p>

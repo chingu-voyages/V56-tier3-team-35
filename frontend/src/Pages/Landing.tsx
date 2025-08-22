@@ -67,7 +67,6 @@ export const Landing = () => {
       >
         <div
           className="container mx-auto px-6"
-          style={{ border: "1px solid red" }}
         >
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center space-x-2">
@@ -139,7 +138,7 @@ export const Landing = () => {
                   <Link
                     key={link.name}
                     to={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className=" hover:text-primary transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {link.name}

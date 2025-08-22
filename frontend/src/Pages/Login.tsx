@@ -139,7 +139,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
           <div className="flex  text-blue-400  gap-3 ">
             <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
             <h4 className="text-2xl sm:text-1xl lg:text-2xl font-medium bg-clip-text">
-              Surgery Update Board
+              SurgeryMs
             </h4>
           </div>
           <Typography
@@ -147,7 +147,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
             variant="h4"
             sx={{
               width: "100%",
-              fontSize: "clamp(2rem, 10vw, 2.15rem)",
+              fontSize: "clamp(1rem, 5vw, 1.15rem)",
               color: "#1da1f2",
             }}
           >

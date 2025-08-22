@@ -210,30 +210,6 @@ export const SurgeryDashboard = () => {
                   <MenuItem value="cancelled">Cancelled</MenuItem>
                 </Select>
               </FormControl>
-
-              {/* priority filter */}
-              {/* <FormControl
-                sx={{
-                  width: { xs: "100%", lg: 150 },
-                }}
-              >
-                <InputLabel>Priority</InputLabel>
-                <Select
-                  value={priorityFilter}
-                  label="Priority"
-                  onChange={(e) => setPriorityFilter(e.target.value)}
-                  sx={{
-                    borderRadius: 2,
-                    backgroundColor: "#F9FAFB",
-                  }}
-                >
-                  <MenuItem value="all">All Priorities</MenuItem>
-                  <MenuItem value="emergency">Emergency</MenuItem>
-                  <MenuItem value="high">High</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="low">Low</MenuItem>
-                </Select>
-              </FormControl> */}
             </Box>
           </CardContent>
         </Card>

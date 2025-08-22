@@ -35,3 +35,16 @@ export const deletePatientApi = async (id: number) => {
         throw error;
     }
 };
+
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const UpdatePatientApi = async (id: number, data: any) => {
+    try {
+        const response = await axios.patch(`${BACKEND_URL}/api/patients/${id}`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating patient:', error);
+        throw error;
+    }
+}
