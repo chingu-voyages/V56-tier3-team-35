@@ -41,7 +41,7 @@ export const deletePatientApi = async (id: number) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const UpdatePatientApi = async (id: number, data: any) => {
     try {
-        const response = await axios.patch(`${BACKEND_URL}/api/patients/${id}`, data);
+        const response = await axios.put(`${BACKEND_URL}/api/patients/${id}`, data);
         return response.data;
     } catch (error) {
         console.error('Error updating patient:', error);

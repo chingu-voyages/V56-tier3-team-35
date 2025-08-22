@@ -10,10 +10,11 @@ import { EditPatientModal } from "./Dashboard/EditPatientModal";
 
 interface LongMenuProps {
   onDelete: () => void;
-  onEdit: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onEdit: any;
 }
 
-export default function LongMenu({ onDelete }: LongMenuProps) {
+export default function LongMenu({ onDelete, onEdit }: LongMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
   const [showEditDialog, setShowEditDialog] = React.useState(false);
@@ -62,6 +63,7 @@ export default function LongMenu({ onDelete }: LongMenuProps) {
       <EditPatientModal
         open={showEditDialog}
         onClose={() => setShowEditDialog(false)}
+        patient={onEdit}
       />
     </div>
   )

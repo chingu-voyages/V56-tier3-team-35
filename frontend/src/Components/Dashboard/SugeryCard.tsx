@@ -73,7 +73,7 @@ export const SurgeryCard = ({ surgery, showMenu }: {surgery: Patient, showMenu: 
               Patient {surgery.patient_number}
             </p>
           </div>
-          {showMenu && <LongMenu onDelete={() => handleDelete(surgery?.id)}/>}
+          {showMenu && <LongMenu onDelete={() => handleDelete(surgery?.id)} onEdit={surgery}/>}
         </div>
       </Box>
       <div className="flex items-center justify-between px-4">

@@ -17,7 +17,7 @@ const router = Router();
 router.get("/", getAllPatients);
 router.post("/", addNewPatient);
 router.get("/:id", getPatient);
-router.patch("/:id", updatePatient);
+router.put("/:id", updatePatient);
 router.delete("/:id", deletePatient);
 
 

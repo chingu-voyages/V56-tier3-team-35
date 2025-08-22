@@ -16,24 +16,93 @@ import {
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { Patient } from '../../types/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UpdatePatientApi } from '../../api/patient.api';
+import { toast } from 'react-toastify';
 
 interface EditPatientModalProps {
   open: boolean;
   onClose: () => void;
+  patient: Patient
 }
 
 export const EditPatientModal: React.FC<EditPatientModalProps> = ({
   open,
   onClose,
-
+  patient
 }) => {
+  // amazonq-ignore-next-line
   const [formData, setFormData] = React.useState<Partial<Patient>>({});
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
 
-// //  React.useEffect(() => {
-//     if (patient) {
-//       setFormData(patient);
-//     }
-//   }, [patient]);
+  const queryClient = useQueryClient();
+
+  // Initialize form with patient data
+  React.useEffect(() => {
+    if (patient && open) {
+      setFormData({
+        first_name: patient.first_name,
+        last_name: patient.last_name,
+        street_address: patient.street_address,
+        city: patient.city,
+        postcode: patient.postcode,
+        region: patient.region,
+        country: patient.country,
+        phone_number: patient.phone_number,
+        contact_email: patient.contact_email,
+        status: patient.status
+      });
+      setErrors({});
+    }
+  }, [patient, open]);
+
+  const updateMutation = useMutation({
+    mutationFn: async (data: Partial<Patient>) => {
+      return UpdatePatientApi(patient.id, data);
+    }, 
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patients'] });
+      toast.success("Patient updated successfully");
+      setFormData({});
+      setErrors({});
+      onClose();
+    }, 
+    onError: (error) => {
+      // Safe error logging without exposing sensitive data
+      console.error('Update patient error:', error instanceof Error ? error.message : 'Unknown error');
+      toast.error("Error updating patient");
+    }
+  }) 
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.first_name?.trim()) {
+      newErrors.first_name = 'First name is required';
+    }
+    if (!formData.last_name?.trim()) {
+      newErrors.last_name = 'Last name is required';
+    }
+    if (!formData.contact_email?.trim()) {
+      newErrors.contact_email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact_email)) {
+      newErrors.contact_email = 'Invalid email format';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error('Please fix the validation errors');
+      return;
+    }
+    
+    updateMutation.mutate(formData);
+  };
 
   const handleChange = (field: keyof Patient, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -72,7 +141,7 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
           <Close />
         </IconButton>
       </DialogTitle>
-
+     <form onSubmit={handleSubmit}>
       <DialogContent sx={{ pt: 3 }}>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -82,6 +151,8 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
               value={formData.first_name || ""}
               onChange={(e) => handleChange("first_name", e.target.value)}
               size="small"
+              error={!!errors.first_name}
+              helperText={errors.first_name}
               slotProps={{
                 input: {
                   sx: {
@@ -98,6 +169,8 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
               value={formData.last_name || ""}
               onChange={(e) => handleChange("last_name", e.target.value)}
               size="small"
+              error={!!errors.last_name}
+              helperText={errors.last_name}
               slotProps={{
                 input: {
                   sx: {
@@ -210,6 +283,8 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
               value={formData.contact_email || ""}
               onChange={(e) => handleChange("contact_email", e.target.value)}
               size="small"
+              error={!!errors.contact_email}
+              helperText={errors.contact_email}
               slotProps={{
                 input: {
                   sx: {
@@ -264,11 +339,11 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
         <Button
           type="submit"
           variant="contained"
+          disabled={updateMutation.isPending}
           sx={{
             backgroundColor: "#1da1f2",
             color: "white",
             textTransform: "none",
-            // fontWeight: 600,
             borderRadius: "12px",
             paddingX: 3,
             paddingY: 1.2,
@@ -277,9 +352,11 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
             },
           }}
         >
-          Save Changes
+          {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
         </Button>
-      </DialogActions>
+
+      </DialogActions> 
+      </form>
     </Dialog>
   );
 };
