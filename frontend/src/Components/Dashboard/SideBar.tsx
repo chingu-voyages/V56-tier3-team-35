@@ -98,7 +98,7 @@ export const SideBar = () => {
       <List>
         {items.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.url;
+          const isActive = location.pathname === item.url
 
           return (
             <ListItem key={item.title} disablePadding>

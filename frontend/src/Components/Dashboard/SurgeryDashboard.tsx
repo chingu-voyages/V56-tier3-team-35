@@ -9,6 +9,7 @@ import {
   InputAdornment,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   TextField,
   Typography,
@@ -24,27 +25,26 @@ import { Patient } from "../../types/types";
 
 
 export const SurgeryDashboard = () => {
+   const [currentPage, setCurrentPage] = React.useState(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentTime, setCurrentTime] = React.useState<Date>(new Date());
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
   // const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
 
-  //time update automatically every minute
   React.useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
     return () => clearInterval(timer);
   }, []);
-  // fetch surgery data
+
 
   const fetchData = useQuery({
     queryKey: ["patients"],
     queryFn: getAllPatients,
   })
 
-  // Debug logging
 
   const PatientData = fetchData.data?.data ? fetchData.data.data : [];
 
@@ -63,6 +63,18 @@ export const SurgeryDashboard = () => {
     return matchesSearch && matchesStatus;
   });
   
+    const itemsPerPage = 6;
+    const paginatedSurgeries = filteredSurgeries.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+
+    const totalPages = Math.ceil(filteredSurgeries.length / itemsPerPage);
+
+    
+    React.useEffect(() => {
+      if (currentPage > totalPages) setCurrentPage(1);
+    }, [filteredSurgeries, totalPages]);
 
 
   return (
@@ -125,7 +137,12 @@ export const SurgeryDashboard = () => {
         </Box>
         {/*"filters and selects"*/}
         <Card
-          sx={{ boxShadow: "gray", borderRadius: 3, border: "1px solid gray", width: "100%" }}
+          sx={{
+            boxShadow: "gray",
+            borderRadius: 3,
+            border: "1px solid gray",
+            width: "100%",
+          }}
         >
           <CardHeader
             title={
@@ -210,30 +227,6 @@ export const SurgeryDashboard = () => {
                   <MenuItem value="cancelled">Cancelled</MenuItem>
                 </Select>
               </FormControl>
-
-              {/* priority filter */}
-              {/* <FormControl
-                sx={{
-                  width: { xs: "100%", lg: 150 },
-                }}
-              >
-                <InputLabel>Priority</InputLabel>
-                <Select
-                  value={priorityFilter}
-                  label="Priority"
-                  onChange={(e) => setPriorityFilter(e.target.value)}
-                  sx={{
-                    borderRadius: 2,
-                    backgroundColor: "#F9FAFB",
-                  }}
-                >
-                  <MenuItem value="all">All Priorities</MenuItem>
-                  <MenuItem value="emergency">Emergency</MenuItem>
-                  <MenuItem value="high">High</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="low">Low</MenuItem>
-                </Select>
-              </FormControl> */}
             </Box>
           </CardContent>
         </Card>
@@ -247,11 +240,29 @@ export const SurgeryDashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredSurgeries.map((surgery: Patient) => (
-              <SurgeryCard key={surgery.patient_number} surgery={surgery} showMenu />
+            {paginatedSurgeries.map((surgery: Patient) => (
+              <SurgeryCard
+                key={surgery.patient_number}
+                surgery={surgery}
+                showMenu
+                showName
+                showContact
+              />
             ))}
           </div>
         </div>
+
+        {totalPages > 1 && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(_, value) => setCurrentPage(value)}
+              color="primary"
+              shape="rounded"
+            />
+          </Box>
+        )}
       </Box>
     </Box>
   );

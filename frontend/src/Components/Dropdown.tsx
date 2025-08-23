@@ -5,15 +5,19 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteConfirmation from "./DeleteConfirmation";
 import { Edit, Trash } from "lucide-react";
+import { EditPatientModal } from "./Dashboard/EditPatientModal";
 // import { Links } from "react-router-dom";
 
 interface LongMenuProps {
   onDelete: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onEdit: any;
 }
 
-export default function LongMenu({ onDelete }: LongMenuProps) {
+export default function LongMenu({ onDelete, onEdit }: LongMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showDeleteDialog, setShowDeleteDialog] = React.useState(false);
+  const [showEditDialog, setShowEditDialog] = React.useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,7 +49,7 @@ export default function LongMenu({ onDelete }: LongMenuProps) {
           },
         }}
       >
-        <MenuItem onClick={handleClose}><Edit className="mr-2 h-4 w-4"/> Edit</MenuItem>
+        <MenuItem onClick={() => {handleClose(); setShowEditDialog(true)}}><Edit className="mr-2 h-4 w-4"/> Edit</MenuItem>
         <MenuItem onClick={() => { handleClose(); setShowDeleteDialog(true); }} style={{color: "red"}}><Trash className="mr-2 h-4 w-4 text-red-500"/>Delete</MenuItem>
       </Menu>
       <DeleteConfirmation
@@ -55,6 +59,11 @@ export default function LongMenu({ onDelete }: LongMenuProps) {
           onDelete();
           setShowDeleteDialog(false);
         }}
+      />
+      <EditPatientModal
+        open={showEditDialog}
+        onClose={() => setShowEditDialog(false)}
+        patient={onEdit}
       />
     </div>
   )

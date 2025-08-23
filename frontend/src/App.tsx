@@ -8,6 +8,7 @@ import Login from "./Pages/Login";
 import { ProtectedRoute } from "./helper/CheckAuth";
 import { Landing } from "./Pages/Landing";
 import Waiting from "./Pages/Waiting";
+import NotFoundPage from "./Pages/404";
 
 // TanStack QueryClientProvider wraps the app to provide React Query context for caching, mutations, and queries
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => {
               </ProtectedRoute>
             } />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<NotFoundPage/>} />
           </Routes>
         </Box>
       </Box>

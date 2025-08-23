@@ -39,7 +39,7 @@ export const MobileView = () => {
       const query = searchQuery.toLowerCase();
       const patientName =
         `${surgery.first_name} ${surgery.last_name}`.toLowerCase();
-      const guardianName = surgery.contact_email?.toLowerCase() || "";
+      const guardianName = surgery.contact_name?.toLowerCase() || "";
 
       return patientName.includes(query) || guardianName.includes(query);
     })
@@ -117,7 +117,7 @@ export const MobileView = () => {
             </Card>
           ) : (
             filteredSurgeries.map((surgery: Patient) => (
-              <SurgeryCard key={surgery.patient_number} surgery={surgery} showMenu={false} />
+              <SurgeryCard key={surgery.patient_number} surgery={surgery} showMenu={false} showName={false} showContact={false} />
             ))
           )}
         </div>

@@ -27,26 +27,10 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "scheduled":
-      return "Scheduled";
-    case "in-progress":
-      return "In Surgery";
-    case "completed":
-      return "Completed";
-    case "delayed":
-      return "Delayed";
-    case "cancelled":
-      return "Cancelled";
-    default:
-      return "Unknown";
-  }
-};
 
 
   function useIsMobile() {
-    const isMobile = useMediaQuery('(max-width: 700px)');
+    const isMobile = useMediaQuery('(max-width: 1000px)');
     return isMobile;
 }
 
@@ -83,6 +67,14 @@ export const WaitingRoom = () => {
       }, 10000);
       return () => clearInterval(timer);
     }, [totalPages]);
+
+    // trigger full page reload
+    React.useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 200000);
+    return () => clearInterval(interval);
+  }, []);
 
 
   const activeSurgeries = surgeries.filter(
@@ -134,10 +126,7 @@ export const WaitingRoom = () => {
             Today's Surgery Schedule
           </h2>
 
-          <div
-            className="hidden lg:block bg-card rounded-lg shadow-card border-2 overflow-hidden animate-scale-in"
-            style={{ border: "1px solid red" }}
-          >
+          <div className="hidden lg:block bg-card rounded-lg shadow-card border-1 border-gray-300 overflow-hidden animate-scale-in">
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 600 }}>
                 <Table>
@@ -163,7 +152,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Contact Info
+                        Procedure
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -174,7 +163,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Location
+                        Surgeon/Room
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -196,7 +185,7 @@ export const WaitingRoom = () => {
                           p: 3,
                         }}
                       >
-                        Start Time
+                        Time
                       </TableCell>
                       <TableCell
                         style={{ minWidth: 170 }}
@@ -206,202 +195,122 @@ export const WaitingRoom = () => {
                           color: "hsl(215, 25%, 15%)",
                         }}
                       >
-                        Date
+                        Family Contact
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {paginatedSurgeries.map(
-                      
-                      (surgery: Patient) => (
-                        <TableRow
-                          key={surgery.patient_number}
-                          sx={{
-                            borderBottom: "1px solid rgba(0,0,0,0.12)",
-                            transition: "all 0.3s ease",
-                            "&:hover": {
-                              backgroundColor: "rgba(0,0,0,0.04)",
-                              transform: "scale(1.01)",
-                              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                            },
-                          }}
-                        >
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-bold"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {surgery.first_name} {surgery.last_name}
-                              </div>
-                              <div className="text-sm text-gray-600/70">
-                                {surgery.patient_number}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div className="text-lg">
-                                {surgery.contact_email}
-                              </div>
-                              <div className="text-sm text-gray-600/70">
-                                {surgery.phone_number}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {surgery.city}, {surgery.region}
-                              </div>
-                              <div className="text-sm text-gray-400/70">
-                                {surgery.postcode}, {surgery.country}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <Badge
-                              className={`${getStatusColor(
-                                surgery.status
-                              )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105`}
-                              sx={{ borderRadius: "50px" }}
+                    {paginatedSurgeries.map((surgery: Patient) => (
+                      <TableRow
+                        key={surgery.patient_number}
+                        sx={{
+                          borderBottom: "1px solid rgba(0,0,0,0.12)",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,0,0,0.04)",
+                            transform: "scale(1.01)",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                          },
+                        }}
+                      >
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg font-bold"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
                             >
+                              {surgery.patient_number}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div className="text-lg">{surgery.procedure}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
+                            >
+                              {surgery.surgeon}
+                            </div>
+                            <div className="text-sm text-gray-400/70">
+                              {surgery.room}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <Badge
+                            className={`${getStatusColor(
+                              surgery.status
+                            )} text-sm px-6  font-semibold transition-all duration-300 hover:scale-105`}
+                            sx={{ borderRadius: "50px" }}
+                          >
+                            <span className="p-3">
                               {surgery.status.charAt(0).toUpperCase() +
                                 surgery.status.slice(1)}
-                            </Badge>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-semibold text-gray-600/60"
-                              >
-                                {new Date(
-                                  surgery.created_at
-                                ).toLocaleTimeString()}
-                              </div>
+                            </span>
+                          </Badge>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            {surgery.status !== "completed" && (
+                              <>
+                                <div className="text-lg font-semibold text-black">
+                                  {new Date(
+                                    surgery.created_at
+                                  ).toLocaleTimeString()}
+                                </div>
+                                <div className="text-sm text-black">
+                                  Est:{" "}
+                                  {(() => {
+                                    const startTime = new Date(
+                                      surgery.created_at
+                                    );
+                                    const endTime = new Date(
+                                      startTime.getTime() +
+                                        surgery.duration * 60 * 60 * 1000
+                                    );
+                                    return endTime.toLocaleTimeString("en-US", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: false,
+                                    });
+                                  })()}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                  Duration: {surgery.duration}h
+                                </div>
+                              </>
+                            )}
+                            {surgery.status === "completed" && <div className="text-lg font-semibold text-black">
+                              {surgery.status.charAt(0).toUpperCase() +
+                                surgery.status.slice(1)}
                             </div>
-                          </TableCell>
-                          <TableCell sx={{ padding: "1.5rem" }}>
-                            <div className="space-y-1">
-                              <div
-                                className="text-lg font-semibold"
-                                style={{ color: "hsl(215, 25%, 15%)" }}
-                              >
-                                {new Date(
-                                  surgery.created_at
-                                ).toLocaleDateString()}
-                              </div>
+                            }
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ padding: "1.5rem" }}>
+                          <div className="space-y-1">
+                            <div
+                              className="text-lg font-semibold"
+                              style={{ color: "hsl(215, 25%, 15%)" }}
+                            >
+                              {surgery.contact_name}
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
+                            <div className="text-sm text-gray-400/70">
+                              {surgery.phone_number}
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             </Paper>
-          </div>
-
-          {/* Mobile View */}
-          <div className="lg:hidden space-y-4">
-            {paginatedSurgeries.map((surgery: Patient, index: number) => (
-              <div
-                key={surgery.patient_number}
-                className="bg-card rounded-lg shadow-card border-2 p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <h3
-                        className="text-xl font-bold"
-                        // style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        {surgery.first_name} {surgery.last_name}
-                      </h3>
-                      <p className="text-sm  text-gray-600/70">
-                        {surgery.patient_number}
-                      </p>
-                    </div>
-                    <Badge
-                      className={`${getStatusColor(
-                        surgery.status
-                      )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105 self-start sm:self-center`}
-                    >
-                      {getStatusText(surgery.status)}
-                    </Badge>
-                  </div>
-
-                  <div className="border-t pt-3">
-                    <h4
-                      className="font-semibold mb-1"
-                      style={{ color: "hsl(215, 25%, 15%)" }}
-                    >
-                      Contact Info
-                    </h4>
-                    <div className="space-y-1">
-                      <div className="text-lg text-gray-600/40">
-                        {surgery.contact_email}
-                      </div>
-                      <div className="text-sm text-gray-600/70">
-                        {surgery.phone_number}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-gray-400/6 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="w-4 h-4 text-gray-600/40" />
-                      <h4 className="font-semibold text-gray-600">Location</h4>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-gray-600/40">Street Address</p>
-                        <p className="text-gray-600 font-medium">
-                          {surgery.street_address}
-                        </p>
-                      </div>
-                      {surgery.region && (
-                        <div>
-                          <p className="text-gray-600/40">Region:</p>
-                          <p className="text-gray-600 font-medium">
-                            {surgery.region}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-2">
-                      <p className="text-gray-600 text-sm font-medium">
-                        City: {surgery.city}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t pt-3">
-                    <div>
-                      <h4 className="font-semibold mb-1">Time</h4>
-                      <p className="text-lg text-gray-600/70">
-                        {new Date(surgery.created_at).toLocaleTimeString()}
-                      </p>
-                    </div>
-                    <div>
-                      <h4
-                        className="font-semibold mb-1"
-                        style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        Date
-                      </h4>
-                      <p className="text-gray-600/70">
-                        {new Date(surgery.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
@@ -418,7 +327,7 @@ export const WaitingRoom = () => {
           ))}
         </div>
 
-        <div className="text-center text-muted-foreground pt-8 animate-fade-in">
+        <div className="text-center pt-8 animate-fade-in">
           <p className="text-base sm:text-lg">
             For questions or concerns, please speak with the front desk staff.
           </p>
