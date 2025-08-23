@@ -163,7 +163,7 @@ export const SurgeryCard = ({ surgery, showMenu, showContact, showName }: {surge
         <div className="p-3 bg-blue-400/5 rounded-lg border border-blue-400/20">
           <div className="flex items-center gap-2 mb-2">
             <Phone className="w-4 h-4  text-blue-400" />
-            <h4 className="font-semibold text-gray-400">Your Contact Info</h4>
+            <h4 className="font-semibold text-gray-400">Patient Contact Info</h4>
           </div>
           <p className="font-medium">{surgery.contact_name}</p>
           <p className="text-sm text-gray-600/40">{surgery.phone_number}</p>

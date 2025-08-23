@@ -27,26 +27,10 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "scheduled":
-      return "Scheduled";
-    case "in-progress":
-      return "In Surgery";
-    case "completed":
-      return "Completed";
-    case "delayed":
-      return "Delayed";
-    case "cancelled":
-      return "Cancelled";
-    default:
-      return "Unknown";
-  }
-};
 
 
   function useIsMobile() {
-    const isMobile = useMediaQuery('(max-width: 700px)');
+    const isMobile = useMediaQuery('(max-width: 1000px)');
     return isMobile;
 }
 
@@ -83,6 +67,14 @@ export const WaitingRoom = () => {
       }, 10000);
       return () => clearInterval(timer);
     }, [totalPages]);
+
+    // trigger full page reload
+    React.useEffect(() => {
+    const interval = setInterval(() => {
+      window.location.reload();
+    }, 200000);
+    return () => clearInterval(interval);
+  }, []);
 
 
   const activeSurgeries = surgeries.filter(
@@ -134,9 +126,7 @@ export const WaitingRoom = () => {
             Today's Surgery Schedule
           </h2>
 
-          <div
-            className="hidden lg:block bg-card rounded-lg shadow-card border-1 border-gray-300 overflow-hidden animate-scale-in"
-          >
+          <div className="hidden lg:block bg-card rounded-lg shadow-card border-1 border-gray-300 overflow-hidden animate-scale-in">
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 600 }}>
                 <Table>
@@ -266,29 +256,40 @@ export const WaitingRoom = () => {
                         </TableCell>
                         <TableCell sx={{ padding: "1.5rem" }}>
                           <div className="space-y-1">
-                            <div className="text-lg font-semibold text-black">
-                              {new Date(
-                                surgery.created_at
-                              ).toLocaleTimeString()}
+                            {surgery.status !== "completed" && (
+                              <>
+                                <div className="text-lg font-semibold text-black">
+                                  {new Date(
+                                    surgery.created_at
+                                  ).toLocaleTimeString()}
+                                </div>
+                                <div className="text-sm text-black">
+                                  Est:{" "}
+                                  {(() => {
+                                    const startTime = new Date(
+                                      surgery.created_at
+                                    );
+                                    const endTime = new Date(
+                                      startTime.getTime() +
+                                        surgery.duration * 60 * 60 * 1000
+                                    );
+                                    return endTime.toLocaleTimeString("en-US", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: false,
+                                    });
+                                  })()}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                  Duration: {surgery.duration}h
+                                </div>
+                              </>
+                            )}
+                            {surgery.status === "completed" && <div className="text-lg font-semibold text-black">
+                              {surgery.status.charAt(0).toUpperCase() +
+                                surgery.status.slice(1)}
                             </div>
-                            <div className="text-sm text-black">
-                              Est:{" "}
-                              {(() => {
-                                const startTime = new Date(surgery.created_at);
-                                const endTime = new Date(
-                                  startTime.getTime() +
-                                    surgery.duration * 60 * 60 * 1000
-                                );
-                                return endTime.toLocaleTimeString("en-US", {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                });
-                              })()}
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              Duration: {surgery.duration}h
-                            </div>
+                            }
                           </div>
                         </TableCell>
                         <TableCell sx={{ padding: "1.5rem" }}>
@@ -310,105 +311,6 @@ export const WaitingRoom = () => {
                 </Table>
               </TableContainer>
             </Paper>
-          </div>
-
-          {/* Mobile View */}
-          <div className="lg:hidden space-y-4">
-            {paginatedSurgeries.map((surgery: Patient, index: number) => (
-              <div
-                key={surgery.patient_number}
-                className="bg-card rounded-lg shadow-card border-2 p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <h3
-                        className="text-xl font-bold"
-                        // style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        {surgery.first_name} {surgery.last_name}
-                      </h3>
-                      <p className="text-sm  text-gray-600/70">
-                        {surgery.patient_number}
-                      </p>
-                    </div>
-                    <Badge
-                      className={`${getStatusColor(
-                        surgery.status
-                      )} text-sm px-3 py-1 font-semibold transition-all duration-300 hover:scale-105 self-start sm:self-center`}
-                    >
-                      {getStatusText(surgery.status)}
-                    </Badge>
-                  </div>
-
-                  <div className="border-t pt-3">
-                    <h4
-                      className="font-semibold mb-1"
-                      style={{ color: "hsl(215, 25%, 15%)" }}
-                    >
-                      Contact Info
-                    </h4>
-                    <div className="space-y-1">
-                      <div className="text-lg text-gray-600/40">
-                        {surgery.contact_email}
-                      </div>
-                      <div className="text-sm text-gray-600/70">
-                        {surgery.phone_number}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-gray-400/6 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="w-4 h-4 text-gray-600/40" />
-                      <h4 className="font-semibold text-gray-600">Location</h4>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-gray-600/40">Street Address</p>
-                        <p className="text-gray-600 font-medium">
-                          {surgery.street_address}
-                        </p>
-                      </div>
-                      {surgery.region && (
-                        <div>
-                          <p className="text-gray-600/40">Region:</p>
-                          <p className="text-gray-600 font-medium">
-                            {surgery.region}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-2">
-                      <p className="text-gray-600 text-sm font-medium">
-                        City: {surgery.city}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t pt-3">
-                    <div>
-                      <h4 className="font-semibold mb-1">Time</h4>
-                      <p className="text-lg text-gray-600/70">
-                        {new Date(surgery.created_at).toLocaleTimeString()}
-                      </p>
-                    </div>
-                    <div>
-                      <h4
-                        className="font-semibold mb-1"
-                        style={{ color: "hsl(215, 25%, 15%)" }}
-                      >
-                        Date
-                      </h4>
-                      <p className="text-gray-600/70">
-                        {new Date(surgery.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
