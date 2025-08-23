@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../utils/cssFiles/landingPage.css'
 import { Badge, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery } from '@mui/material';
-import {Clock, Heart, MapPin } from 'lucide-react';
+import {Clock, Heart} from 'lucide-react';
 import { MobileView } from './MobileView';
 import { useQuery } from '@tanstack/react-query';
 import { getAllPatients } from '../../api/patient.api';

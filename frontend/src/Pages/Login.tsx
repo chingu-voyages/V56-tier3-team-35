@@ -78,7 +78,7 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   const loginMutation = useMutation({
     mutationFn: () => loginUser(email, password),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-    onSuccess: (data: any) => {
+    onSuccess: () => {
         // console.log(data)
         toast.success("Login Successful")
         navigate('/dashboard')

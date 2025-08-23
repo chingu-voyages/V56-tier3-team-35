@@ -74,7 +74,7 @@ export const SurgeryDashboard = () => {
     
     React.useEffect(() => {
       if (currentPage > totalPages) setCurrentPage(1);
-    }, [filteredSurgeries, totalPages]);
+    }, [filteredSurgeries, totalPages, currentPage]);
 
 
   return (
