@@ -78,13 +78,18 @@ export default function Login(props: { disableCustomTheme?: boolean }) {
   const loginMutation = useMutation({
     mutationFn: () => loginUser(email, password),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-    onSuccess: () => {
-        // console.log(data)
+    onSuccess: (data: any) => {
+        // console.log(data)  
         toast.success("Login Successful")
-        navigate('/dashboard')
         setEmail("");
         setPassword("");
         setIsLoading(false);
+        
+        if(data && data.token) {
+          localStorage.setItem('token', data.token) 
+          navigate('/dashboard')
+        }
+  
     },
 
     // amazonq-ignore-next-line

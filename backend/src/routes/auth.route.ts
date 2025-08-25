@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { signup, login, logout, refresh, getDashboard, checkAuth} from "../controllers/auth.controller";
-import { authToken } from "../middleware/auth.middleware";
+import { authToken, authUser } from "../middleware/auth.middleware";
 
 const router = Router();
  
@@ -9,5 +9,5 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.post("/refresh", refresh);
 router.get("/dash", authToken, getDashboard);
-router.get('/check-auth', authToken, checkAuth)
+router.get('/check-auth', authUser, checkAuth)
 export default router;

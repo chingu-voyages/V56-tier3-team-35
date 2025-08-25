@@ -52,7 +52,7 @@ export const login = async (req: Request, res: Response) => {
 
         console.log(loginData.session.access_token)
 
-        res.status(200).json(loginData.user);
+        res.status(200).json({ message: "User login successful!", token: loginData.session.access_token });
     } catch (error) {
         console.error("Unexpected error: ", error.message);
         res.status(500).json({ error: "Unexpected server error in login" });
@@ -61,10 +61,17 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
     try {
-        const access_token = req.cookies?.access_token;
+          const authHeader = req.headers.authorization;
 
-        if (access_token) {
-            await supabase.auth.admin.signOut(access_token);
+          if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            res.status(401).json({ message: "Unauthorized" });
+            return;
+          }
+
+          const token = authHeader.split(" ")[1];
+
+        if (token) {
+            await supabase.auth.admin.signOut(token);
         }
 
         res.clearCookie("access_token", { path: "/" });

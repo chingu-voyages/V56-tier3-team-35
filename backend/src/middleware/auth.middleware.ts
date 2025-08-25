@@ -33,3 +33,32 @@ export const authToken = async (req: Request, res: Response, next: NextFunction)
 }
 
 
+
+export const authUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "User not authorised" });
+    }
+
+    const { data, error } = await supabase.auth.getUser(token);
+
+    if (error || !data.user) {
+      return res.status(401).json({ message: "User not authorised" });
+    }
+
+    req.user = data.user;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+

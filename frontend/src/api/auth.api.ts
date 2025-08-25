@@ -16,8 +16,17 @@ export const loginUser = async(email: string, password: string) => {
 }
 
 export const checkAuth = async() => {
+    const token = localStorage.getItem('token');
+
+    if(!token){
+        throw new Error("No token found")
+    }
     try {
-        const response: AxiosResponse<unknown> = await axios.get(`${BACKEND_URL}/api/auth/check-auth`);
+        const response: AxiosResponse<unknown> = await axios.get(`${BACKEND_URL}/api/auth/check-auth`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response.status === 200;
     } catch (error) {
         console.log(error);
@@ -26,9 +35,19 @@ export const checkAuth = async() => {
 }
 
 export const Logout = async() => {
+    const token = localStorage.getItem('token');
     try {
-        const response: AxiosResponse<unknown> = await axios.post(`${BACKEND_URL}/api/auth/logout`);
-        return response.status === 200;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const response: AxiosResponse<unknown> = await axios.post(
+          `${BACKEND_URL}/api/auth/logout`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        localStorage.removeItem('token');
     } catch (error) {
         console.log(error);
         throw new Error(`Error occurred ${error}`)
